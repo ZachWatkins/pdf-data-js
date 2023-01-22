@@ -33,8 +33,9 @@
     }
   },
   "scripts": {
-    "start": "npm run data:fetch && npm run data:select",
+    "start": "npm run data",
     "pdf:index": "node tasks/print-index.js",
+    "data": "npm run data:fetch && npm run data:select && npm run data:tojson",
     "data:fetch": "node tasks/fetch-data.js",
     "data:select": "node tasks/save-filtered-workbook.js",
     "data:tojson": "node tasks/save-filtered-workbook-to-json.js"
