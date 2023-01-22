@@ -3,20 +3,23 @@
 <head>
   <meta charset="utf-8">
   <title>Childcare Fact Sheet</title>
-  <script src="index.js" defer></script>
+  <style>
+    ul {
+      background-color: #DDD;
+    }
+  </style>
 </head>
 <body>
   <h1>Childcare Fact Sheet</h1>
-  <my-paragraph>
-    <span slot="my-text">Let's have some different text!</span>
-  </my-paragraph>
+  <div>
+    <span>Let's have some different text!</span>
+  </div>
 
-  <my-paragraph>
-    <ul slot="my-text">
+  <div>
+    <ul>
       <li>Let's have some different text!</li>
       <li>In a list!</li>
     </ul>
-  </my-paragraph>
-
+  </div>
 </body>
 </html>
