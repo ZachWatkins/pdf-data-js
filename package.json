@@ -1,11 +1,32 @@
 {
-  "name": "pdf-data-viz",
+  "name": "@zachwatkins/pdf-data-js",
   "version": "1.0.0",
+  "private": true,
   "description": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zachwatkins/pdf-data-js.git"
+  },
+  "engines": {
+    "node": ">=18.13.0"
+  },
   "main": "index.js",
   "config": {
+    "url": "public/index.html",
+    "download": {
+      "url": "https://www.dol.gov/sites/dolgov/files/WB/media/stats/nationaldatabaseofchildcareprices.xlsx",
+      "dest": "./data/nationaldatabaseofchildcareprices.xlsx",
+      "force": false
+    },
+    "build": {
+      "texas": {
+        "src": "./data/nationaldatabaseofchildcareprices.xlsx"
+      },
+      "brazos": {}
+    },
     "data": {
-      "remote": {
+      "remote": "https://www.dol.gov/sites/dolgov/files/WB/media/stats/nationaldatabaseofchildcareprices.xlsx",
+      "download": {
         "url": "https://www.dol.gov/sites/dolgov/files/WB/media/stats/nationaldatabaseofchildcareprices.xlsx",
         "dest": "./data/nationaldatabaseofchildcareprices.xlsx"
       },
@@ -22,6 +43,7 @@
         }
       }
     },
+    "query": {},
     "pdf": {
       "url": "./public/index.html",
       "dest": "./pdf/index.pdf",
@@ -33,15 +55,23 @@
     }
   },
   "scripts": {
-    "start": "npm run data",
-    "pdf:index": "node tasks/print-index.js",
-    "data": "npm run data:fetch && npm run data:select && npm run data:tojson",
-    "data:fetch": "node tasks/fetch-data.js",
-    "data:select": "node tasks/save-filtered-workbook.js",
-    "data:tojson": "node tasks/save-filtered-workbook-to-json.js"
+    "prestart": "npm run download && npm run build",
+    "start": "npm run open",
+    "download": "node tasks/download.js",
+    "build": "npm run query",
+    "open": "node tasks/open.js",
+    "query": "node tasks/save-filtered-workbook.js",
+    "postquery": "npm run query:tojson",
+    "query:tojson": "node tasks/workbook-to-json.js",
+    "data": "npm run download && npm run query && npm run query:tojson",
+    "pdf:index": "node tasks/pdf-index.js"
   },
-  "author": "Zachary Kendall Watkins <watkinza@gmail.com>",
-  "license": "GPL-2.0-or-later",
+  "author": {
+    "name": "Zachary Kendall Watkins",
+    "email": "zwatkins.it@gmail.com",
+    "url": "https://zachwatkins.dev/"
+  },
+  "license": "MIT",
   "dependencies": {
     "xlsx": "^0.18.5",
     "puppeteer": "^19.5.2"

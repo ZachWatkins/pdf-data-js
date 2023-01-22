@@ -2,7 +2,7 @@
 
 This project includes Node scripts for downloading, filtering, and converting XLSX files to JSON for use in a printable PDF file from a rendered web page. Two top-level NodeJS dependencies are used: xlsx and puppeteer.
 
-Custom NodeJS modules are included in the `src` folder and are used by scripts in the `tasks` folder.
+Modules in the `src` folder are used by scripts in the `tasks` folder.
 
 ## Command Line Tasks
 
@@ -18,7 +18,7 @@ The initial process involves the following steps:
 3. Format Data for Template
 4. Combine Data and Template into PDF
 
-Options for managing complexity and change:
+Details to consider when managing complexity and change:
 
 1. Collect Data  
    a. JSON  

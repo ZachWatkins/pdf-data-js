@@ -11,7 +11,9 @@ const path = require('path')
  * @return {void}
  */
 function download({url, dest, force}) {
-    force = force || false
+    if (!url) return new Error('URL not provided.')
+    if (!dest) return new Error('Destination file path not provided.')
+    force = force || true
     dest = path.resolve(dest)
     if (fs.existsSync(dest) && !force) {
         console.error(`File exists: ${path.basename(dest)}`)
@@ -41,4 +43,4 @@ function download({url, dest, force}) {
     });
 }
 
-module.exports = download
+module.exports = { download }
