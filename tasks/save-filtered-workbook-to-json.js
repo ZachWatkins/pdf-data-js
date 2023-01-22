@@ -1,7 +1,13 @@
 const workbookToJson = require('../src/workbook-to-json')
 const package = require('../package.json')
-workbookToJson({
-    src: package.config.data.filtered.dest,
-    dest: package.config.data.filtered.json,
-    sheet: package.config.data.filtered.sheet
-})
+const filters = Array.isArray(package.config.data.filtered)
+    ? package.config.data.filtered
+    : [package.config.data.filtered]
+for (let i = 0; i < filters.length; i++) {
+    const filter = filters[i];
+    workbookToJson({
+        src: filter.dest,
+        dest: filter.json,
+        sheet: filter.sheet
+    })
+}
