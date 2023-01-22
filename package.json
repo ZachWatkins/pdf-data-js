@@ -1,0 +1,48 @@
+{
+  "name": "pdf-data-viz",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "config": {
+    "data": {
+      "remote": {
+        "url": "https://www.dol.gov/sites/dolgov/files/WB/media/stats/nationaldatabaseofchildcareprices.xlsx",
+        "dest": "./data/nationaldatabaseofchildcareprices.xlsx"
+      },
+      "filtered": {
+        "src": "./data/nationaldatabaseofchildcareprices.xlsx",
+        "dest": "./data/stateprices.xlsx",
+        "json": "./data/stateprices.json",
+        "sheet": "Sheet",
+        "filter": {
+          "sheet": "in",
+          "only": {
+            "State_Name": "Texas"
+          }
+        }
+      }
+    },
+    "pdf": {
+      "url": "./public/index.html",
+      "dest": "./pdf/index.pdf",
+      "options": {
+        "format": "Letter",
+        "printBackground": true,
+        "displayHeaderFooter": false
+      }
+    }
+  },
+  "scripts": {
+    "start": "npm run data:fetch && npm run data:select",
+    "pdf:index": "node tasks/print-index.js",
+    "data:fetch": "node tasks/fetch-data.js",
+    "data:select": "node tasks/select-state-data.js",
+    "data:tojson": "node tasks/xlsx-to-json.js"
+  },
+  "author": "Zachary Kendall Watkins <watkinza@gmail.com>",
+  "license": "GPL-2.0-or-later",
+  "dependencies": {
+    "xlsx": "^0.18.5",
+    "puppeteer": "^19.5.2"
+  }
+}
