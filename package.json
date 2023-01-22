@@ -36,8 +36,8 @@
     "start": "npm run data:fetch && npm run data:select",
     "pdf:index": "node tasks/print-index.js",
     "data:fetch": "node tasks/fetch-data.js",
-    "data:select": "node tasks/select-state-data.js",
-    "data:tojson": "node tasks/xlsx-to-json.js"
+    "data:select": "node tasks/save-filtered-workbook.js",
+    "data:tojson": "node tasks/save-filtered-workbook-to-json.js"
   },
   "author": "Zachary Kendall Watkins <watkinza@gmail.com>",
   "license": "GPL-2.0-or-later",
