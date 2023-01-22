@@ -1,5 +1,14 @@
 # PDF Data Visualization using JavaScript
 
+This project includes Node scripts for downloading, filtering, and converting XLSX files to JSON for use in a printable PDF file from a rendered web page. Two top-level NodeJS dependencies are used: xlsx and puppeteer.
+
+Custom NodeJS modules are included in the `src` folder and are used by scripts in the `tasks` folder.
+
+## Command Line Tasks
+
+`npm run data` - Downloads the remote file configured in package.json to a local file and creates a filtered version in both `xlsx` and `json` format.
+`npm run pdf:index` - Prints the web page at `public/index.html` using Puppeteer.
+
 ## Process
 
 The initial process involves the following steps:
