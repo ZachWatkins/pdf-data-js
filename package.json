@@ -38,7 +38,7 @@
       "brazos": {
         "src": "./data/texas.xlsx",
         "sheet": "in",
-        "dest": "./data/brazos.xlsx",
+        "dest": "./data/brazos.json",
         "select": [
           "State_Name",
           "County_Name",

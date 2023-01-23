@@ -5,9 +5,9 @@ const path = require('path')
 /**
  * Download a remote file.
  * @param {object} options
- * @param {string} url Remote URL for file to download.
- * @param {string} dest Local destination file path.
- * @param {boolean} force Whether to replace an existing local file.
+ * @param {string} options.url Remote URL for file to download.
+ * @param {string} options.dest Local destination file path.
+ * @param {boolean} options.force Whether to replace an existing local file.
  * @returns {true|Error}
  */
 function download({url, dest, force}) {

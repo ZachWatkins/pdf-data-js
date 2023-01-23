@@ -1,9 +1,16 @@
+const options = {
+    src: undefined,
+    sheet: undefined,
+    dest: undefined,
+    select: [],
+    where: {}
+};
 const package = require('../package.json')
-const saveFilteredWorkbook = require('../src/workbook/write')
+const { WorkBookSheetToFile } = require('../src/workbook/write')
 const filters = Array.isArray(package.config.data.filtered)
     ? package.config.data.filtered
     : [package.config.data.filtered]
 for (let i = 0; i < filters.length; i++) {
     const filter = filters[i];
-    saveFilteredWorkbook(filter)
+    WorkBookSheetToFile(filter)
 }
