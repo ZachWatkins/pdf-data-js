@@ -19,30 +19,41 @@
     },
     "build": {
       "texas": {
-        "src": "./data/nationaldatabaseofchildcareprices.xlsx"
-      },
-      "brazos": {}
-    },
-    "data": {
-      "remote": "https://www.dol.gov/sites/dolgov/files/WB/media/stats/nationaldatabaseofchildcareprices.xlsx",
-      "download": {
-        "url": "https://www.dol.gov/sites/dolgov/files/WB/media/stats/nationaldatabaseofchildcareprices.xlsx",
-        "dest": "./data/nationaldatabaseofchildcareprices.xlsx"
-      },
-      "filtered": {
         "src": "./data/nationaldatabaseofchildcareprices.xlsx",
-        "dest": "./data/stateprices.xlsx",
-        "json": "./data/stateprices.json",
-        "sheet": "Sheet",
-        "filter": {
-          "sheet": "in",
-          "only": {
-            "State_Name": "Texas"
-          }
+        "sheet": "in",
+        "dest": "./data/texas.xlsx",
+        "select": [
+          "State_Name",
+          "County_Name",
+          "StudyYear",
+          "H_Under6_BothWork",
+          "H_Under6_FWork",
+          "H_Under6_MWork",
+          "H_Under6_SingleM"
+        ],
+        "where": {
+          "State_Name": "Texas"
+        }
+      },
+      "brazos": {
+        "src": "./data/texas.xlsx",
+        "sheet": "in",
+        "dest": "./data/brazos.xlsx",
+        "select": [
+          "State_Name",
+          "County_Name",
+          "StudyYear",
+          "H_Under6_BothWork",
+          "H_Under6_FWork",
+          "H_Under6_MWork",
+          "H_Under6_SingleM"
+        ],
+        "where": {
+          "State_Name": "Texas",
+          "County_Name": "Brazos County"
         }
       }
     },
-    "query": {},
     "pdf": {
       "url": "./public/index.html",
       "dest": "./pdf/index.pdf",
@@ -55,15 +66,11 @@
   },
   "scripts": {
     "check-env": "node -e 'console.log(process.env)' | grep npm",
+    "download": "node tasks/download.js --force=false",
     "prestart": "npm run download && npm run build",
     "start": "npm run open",
-    "download": "node tasks/download.js --force=false",
-    "build": "npm run query",
     "open": "node tasks/open.js",
-    "query": "node tasks/save-filtered-workbook.js",
-    "postquery": "npm run query:tojson",
-    "query:tojson": "node tasks/workbook-to-json.js",
-    "data": "npm run download && npm run query && npm run query:tojson",
+    "build": "node tasks/build.js",
     "pdf:index": "node tasks/pdf-index.js"
   },
   "author": {
