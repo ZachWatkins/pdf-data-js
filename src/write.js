@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 
-function CreateJsonFile({dest, data, pretty}) {
+function WriteJsonFile({data, dest, pretty}) {
     pretty = pretty || false
     const json = !pretty
         ? JSON.stringify(data)
@@ -11,4 +11,4 @@ function CreateJsonFile({dest, data, pretty}) {
     })
 }
 
-module.exports = CreateJsonFile
+module.exports = { WriteJsonFile }

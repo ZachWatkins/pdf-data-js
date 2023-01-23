@@ -1,4 +1,4 @@
-const workbookToJson = require('../src/workbook-to-json')
+const workbookToJson = require('../src/sheet-to-json-file')
 const package = require('../package.json')
 const filters = Array.isArray(package.config.data.filtered)
     ? package.config.data.filtered

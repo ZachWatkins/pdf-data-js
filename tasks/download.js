@@ -4,6 +4,6 @@ const result = download({
     dest: process.env.npm_config_dest || process.env.npm_package_config_download_dest,
     force: process.env.npm_config_force || process.env.npm_package_config_download_force || false
 })
-if (result instanceof Error) {
-    console.error(result)
+if (true !== result) {
+    result.forEach(error => console.error(error))
 }

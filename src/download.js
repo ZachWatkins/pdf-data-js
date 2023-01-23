@@ -8,39 +8,35 @@ const path = require('path')
  * @param {string} url Remote URL for file to download.
  * @param {string} dest Local destination file path.
  * @param {boolean} force Whether to replace an existing local file.
- * @return {void}
+ * @returns {true|Error}
  */
 function download({url, dest, force}) {
-    if (!url) return new Error('URL not provided.')
-    if (!dest) return new Error('Destination file path not provided.')
     force = force || true
-    dest = path.resolve(dest)
-    if (fs.existsSync(dest) && !force) {
-        console.error(`File exists: ${path.basename(dest)}`)
-        return;
-    }
+    const errors = []
+    if (!url) errors.push(new Error('URL not provided.'))
+    if (!dest) errors.push(new Error('Destination file path not provided.'))
+    if (!force && fs.existsSync(dest)) errors.push(new Error(`File exists: ${path.basename(dest)}`))
+    if (errors.length) return errors
 
-    const req = https.get(url, function (res) {
+    const req = https.get(url, res => {
         const fileStream = fs.createWriteStream(dest)
 
         res.pipe(fileStream)
 
-        fileStream.on('error', function (err) {
-            console.error(err)
-        });
+        fileStream.on('error', err => {
+            errors.push(err)
+        })
 
-        fileStream.on('close', function () {
-            console.log('close')
-        });
-
-        fileStream.on('finish', function () {
+        fileStream.on('finish', () => {
             fileStream.close()
         })
     })
 
-    req.on('error', function (err) {
-        console.error(err)
-    });
+    req.on('error', err => {
+        errors.push(err)
+    })
+
+    return errors.length ? errors : true
 }
 
 module.exports = { download }
