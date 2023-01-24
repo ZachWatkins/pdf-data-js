@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const options = {
     src: undefined,
     sheet: undefined,

@@ -15,7 +15,8 @@
     "url": "public/index.html",
     "download": {
       "url": "https://www.dol.gov/sites/dolgov/files/WB/media/stats/nationaldatabaseofchildcareprices.xlsx",
-      "dest": "./data/nationaldatabaseofchildcareprices.xlsx"
+      "dest": "./data/nationaldatabaseofchildcareprices.xlsx",
+      "force": false
     },
     "build": {
       "texas": {
@@ -66,7 +67,7 @@
   },
   "scripts": {
     "check-env": "node -e 'console.log(process.env)' | grep npm",
-    "download": "node tasks/download.js --force=false",
+    "download": "node tasks/download.js",
     "prestart": "npm run download && npm run build",
     "start": "npm run open",
     "open": "node tasks/open.js",
