@@ -11,7 +11,7 @@ const path = require('path')
  * @returns {true|Error}
  */
 function download({url, dest, force}) {
-    force = force || true
+    force = force || false
     const errors = []
     if (!url) errors.push(new Error('URL not provided.'))
     if (!dest) errors.push(new Error('Destination file path not provided.'))
