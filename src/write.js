@@ -46,7 +46,6 @@ function WorkBookSheetToFile({ dest, src, workbook, sheet, select, where, pretty
     workbook = workbook || GetWorkBook({ src })
     sheet = sheet || Object.keys(workbook.SheetNames)[0]
     let data = GetWorkSheetRows({ workbook, sheet, select, where })
-    let results
     if ('.json' === path.extname(dest)) {
         results = WriteJsonFile({ data, dest, pretty, force })
     } else {
