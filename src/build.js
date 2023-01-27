@@ -5,6 +5,7 @@
  * @package @zachwatkins/pdf-data-viz-js
  */
 const { Config } = require('./config')
+const write = require('./write')
 
 /**
  * Build files using configuration parameters.
@@ -26,7 +27,10 @@ function Build(options) {
             pretty: true,
             force: false
         },
-        depthMax: 3
+        depthMax: 1
+    })
+    this.config.each(function(config){
+        write.WorkBookSheetToFile(config)
     })
 }
 

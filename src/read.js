@@ -7,6 +7,7 @@ const XLSX = require('xlsx')
  * @returns {import('xlsx').WorkBook} WorkBook object.
  */
 function GetWorkBook(src) {
+    console.log('GetWorkBook')
     return XLSX.readFileSync(src)
 }
 
@@ -19,9 +20,10 @@ function GetWorkBook(src) {
  * @returns {import('xlsx').WorkSheet} WorkSheet object.
  */
 function GetWorkSheet({ sheet, src, workbook }) {
+    console.log('GetWorkSheet')
     workbook = workbook || GetWorkBook(src)
     sheet = sheet || Object.keys(workbook.SheetNames)[0]
-    const worksheet = workbook.Sheets[sheet]
+    return workbook.Sheets[sheet]
 }
 
 /**

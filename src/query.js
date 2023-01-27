@@ -8,6 +8,7 @@ function select(select, rows) {
     if (!select || !select.length) return rows
     return rows.map(row => select.reduce((props, key) => {
         props[key] = row[key]
+        return props
     }, {}))
 }
 
@@ -18,6 +19,7 @@ function select(select, rows) {
  * @returns {object[]}
  */
 function where(where, rows) {
+    console.log('where', where)
     if (!where || !Object.keys(where).length) return rows
     return rows.filter(row => {
         for (let key in where) {

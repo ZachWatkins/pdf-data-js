@@ -34,12 +34,13 @@
         ],
         "where": {
           "State_Name": "Texas"
-        }
+        },
+        "force": true
       },
       "brazos": {
         "src": "./data/texas.xlsx",
         "sheet": "in",
-        "dest": "./data/brazos.json",
+        "dest": ["./data/brazos.xlsx", "./data/brazos.json"],
         "select": [
           "State_Name",
           "County_Name",
@@ -52,7 +53,8 @@
         "where": {
           "State_Name": "Texas",
           "County_Name": "Brazos County"
-        }
+        },
+        "force": true
       }
     },
     "pdf": {
@@ -70,8 +72,8 @@
     "download": "node tasks/download.js",
     "prestart": "npm run download && npm run build",
     "start": "npm run open",
-    "open": "node tasks/open.js",
     "build": "node tasks/build.js",
+    "open": "node tasks/open.js",
     "pdf:index": "node tasks/pdf-index.js"
   },
   "author": {
