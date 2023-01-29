@@ -1,0 +1,85 @@
+{
+    "workbookConfig": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://zachwatkins.dev/schemas/workbookschema.json",
+        "type": "object",
+        "properties": {
+            "name": {
+                "type": "string"
+            },
+            "path": {
+                "type": "string",
+                "format": "uri"
+            },
+            "sheets": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        },
+                        "select": {
+                            "type": "array",
+                            "uniqueItems": true,
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "from": {
+                            "type": "string",
+                            "format": "uri"
+                        },
+                        "sheet": {
+                            "type": "string"
+                        },
+                        "where": {
+                            "type": "array",
+                            "uniqueItems": true,
+                            "items": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "uniqueItems": true
+                                }
+                            }
+                        },
+                        "orderBy": {
+                            "type": "array",
+                            "uniqueItems": true,
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "array",
+                                    "uniqueItems": true,
+                                    "prefixItems": [
+                                        { "type": "string" },
+                                        { "enum": ["ascending", "descending", "asc", "desc", "ASC", "DESC"] }
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                        "name",
+                        "select",
+                        "from",
+                        "sheet",
+                        "where",
+                        "orderBy"
+                    ]
+                }
+            }
+        },
+        "additionalProperties": true,
+        "required": [
+            "name",
+            "path",
+            "sheets"
+        ]
+    }
+}
