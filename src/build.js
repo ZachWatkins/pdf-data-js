@@ -4,64 +4,198 @@
  * @created 2023-01-24 9:53PM CST
  * @package @zachwatkins/pdf-data-viz-js
  */
-const { Config } = require('./config')
-const { WorkBook, WriteJsonFile } = require('./write')
+const fs = require('fs')
+const path = require('path')
+const XLSX = require('xlsx')
 
-class Build {
-    /**
-     * Build files using configuration parameters.
-     * @param {object} options - Write options.
-     * @param {string|string[]} options.dest - Where to write the file.
-     * @param {string} [options.src] - WorkBook file path. Required if options.workbook is not defined.
-     * @param {string} [options.sheet] - WorkBook sheet name. Defaults to the first WorkBook sheet name.
-     * @param {string[]} [options.select] - Columns to select.
-     * @param {object} [options.where] - Only select objects having these property values.
-     * @param {boolean} [options.force=false] Whether to replace an existing local file.
-     * @param {boolean} [options.pretty] - Whether to indent JSON file contents.
-     */
-    constructor(options) {
-        const config = this.config(options)
-        const workbook = new WorkBook(src)
-        let jsondest = options.dest.replace(/\.xlsx$/ig, '.json')
-        let xlsxdest = options.dest.replace(/\.json$/ig, '.xlsx')
-        let data = GetWorkSheetRows({ workbook, sheet: options.sheet, select, where })
-        config.each(config => {
-            this.json({ data, dest: config.dest, force: config.force, pretty: config.pretty })
-            write.WorkBookSheetT-oFile(config)
+function Build(list) {
+    if (Array.isArray(list)) {
+        list.forEach(config => {
+            const workbook = new WorkBook(config)
+            workbook.build()
         })
+    } else {
+        const workbook = new WorkBook(list)
+        workbook.build()
     }
-    json({ data, dest, pretty, force }){
-        dest.filter(path => 0 <= path.indexOf(/\.json$/i))
-            .ForEach(path => {
-                WriteJsonFile({ data, dest, pretty, force })
-            })
-    }
+}
 
+class WorkBook {
     /**
      * Build files using configuration parameters.
-     * @param {object} options - Write options.
-     * @param {string|string[]} options.dest - Where to write the file.
-     * @param {string} [options.src] - WorkBook file path. Required if options.workbook is not defined.
-     * @param {string} [options.sheet] - WorkBook sheet name. Defaults to the first WorkBook sheet name.
-     * @param {string[]} [options.select] - Columns to select.
-     * @param {object} [options.where] - Only select objects having these property values.
-     * @param {boolean} [options.force=false] Whether to replace an existing local file.
-     * @param {boolean} [options.pretty] - Whether to indent JSON file contents.
-     * @returns {Config}
+     * @param {object} options - Workbook build options.
+     * @param {string} options.name - Workbook name.
+     * @param {string} options.file - WorkBook file path.
+     * @param {boolean} options.locked - Whether to rebuild an existing WorkBook.
+     * @param {array}  options.sheets - WorkBook sheet build definitions.
      */
-    config({ dest, src, sheet, select, where, force, pretty }) {
-        return new Config({
-            values: { dest, src, sheet, select, where, force, pretty },
-            keys: ['dest', 'src', 'sheet', 'select', 'where', 'force', 'pretty'],
-            defaults: { pretty: true, force: false },
-            depthMax: 1,
-            callback: (config) => {
-                if (config.dest && ! Array.isArray(config.dest)) {
-                    config.dest = [config.dest]
-                }
+    constructor({ name, file, locked, sheets }) {
+        this.name = name
+        this.file = path.resolve(`${__dirname}/../${file}`)
+        this.sheets = sheets || []
+        this.locked = locked || false
+    }
+
+    build() {
+        const exists = fs.existsSync(this.file)
+        if (exists && this.locked) {
+            return
+        }
+        const workbook = exists
+            ? XLSX.readFileSync(this.file)
+            : XLSX.utils.book_new()
+        let sources = {}
+        this.sheets.forEach(sheet => {
+            let { name, source, select, from, where, orderBy } = sheet
+            let sheetName = name || from
+            if (!sources[source]) {
+                sources[source] = XLSX.readFileSync(path.resolve(`${__dirname}/../${source}`))
+            }
+            from = from || Object.keys(sources[source].SheetNames)[0]
+            let rows = XLSX.utils.sheet_to_json(sources[source].Sheets[from])
+            if (where) {
+                rows = this.where(where, rows)
+            }
+            if (select) {
+                rows = this.select(select, rows)
+            }
+            if (orderBy) {
+                rows = this.orderBy(orderBy, rows)
+            }
+
+            const worksheet = XLSX.utils.json_to_sheet(rows)
+
+            if (!workbook.Sheets[sheetName]) {
+                XLSX.utils.book_append_sheet(workbook, worksheet, sheetName)
+            } else {
+                workbook.Sheets[sheetName] = worksheet
+            }
+            // Write the CSV file.
+            fs.writeFile(
+                this.file.replace('.xlsx', `.${sheetName.toLowerCase()}.csv`),
+                XLSX.utils.sheet_to_csv(worksheet),
+                {encoding: 'utf8'},
+                () => {}
+            )
+            // Write the JSON file.
+            const jsonData = JSON.stringify(rows, null, 4)
+            fs.writeFile(
+                this.file.replace('.xlsx', `.${sheetName.toLowerCase()}.json`),
+                jsonData,
+                {encoding: 'utf8'},
+                () => {}
+            )
+            // Write the JS file.
+            fs.writeFile(
+                this.file.replace('.xlsx', `.${sheetName.toLowerCase()}.js`),
+                `const ${this.name.replace(/\s+/, '')}_${sheetName.replace(/\s+/, '')} = ${jsonData}`,
+                {encoding: 'utf8'},
+                () => {}
+            )
+        })
+        XLSX.writeFileXLSX(workbook, this.file)
+    }
+
+    where(opts, rows) {
+        if (!Array.isArray(opts[0])) {
+            return rows.filter(row => row[opts[0]] === opts[1])
+        }
+        opts.forEach(opt => {
+            rows = rows.filter(row => row[opt[0]] === opt[1])
+        })
+        return rows;
+    }
+
+    select(opts, rows) {
+        return rows.map(row => opts.reduce((props, key) => {
+            props[key] = row[key]
+            return props
+        }, {}))
+    }
+
+    orderBy(opts, rows) {
+        if (!Array.isArray(opts[0])) {
+            if ("descending" === opts[1]) {
+                return rows.sort(this.sortDescending.bind(this, opts[0]))
+            } else {
+                return rows.sort(this.sortAscending.bind(this, opts[0]))
+            }
+        }
+        opts.forEach(opt => {
+            if ("descending" === opt[1]) {
+                rows.sort(this.sortDescending.bind(this, opt[0]))
+            } else {
+                rows.sort(this.sortAscending.bind(this, opt[0]))
             }
         })
+        return rows;
     }
+
+    sortAscending(prop, a, b) {
+        a = a[prop]
+        b = b[prop]
+        if (a === b) return 0
+        if (typeof a === 'number' || typeof b === 'number') {
+            a = a || 0
+            b = b || 0
+            return a - b
+        }
+        a = a ? a.toUpperCase() : ''
+        b = b ? b.toUpperCase() : ''
+        if (a < b) {
+            return -1
+        }
+        if (a > b) {
+            return 1
+        }
+        return 0
+    }
+
+    sortDescending(prop, a, b) {
+        a = a[prop]
+        b = b[prop]
+        if (a === b) return 0
+        if (typeof a === 'number' || typeof b === 'number') {
+            a = a || 0
+            b = b || 0
+            return b - a
+        }
+        a = a ? a.toUpperCase() : ''
+        b = b ? b.toUpperCase() : ''
+        if (b < a) {
+            return -1
+        }
+        if (b > a) {
+            return 1
+        }
+        return 0
+    }
+}
+
+/**
+ * Write data to a JSON file.
+ * @param {object} options - Write options.
+ * @param {any} options.data - File contents.
+ * @param {string} options.file - Destination file path.
+ * @param {boolean} [options.pretty=false] - Whether to indent JSON file contents.
+ * @param {boolean} [options.force=false] - Whether to replace an existing local file.
+ * @returns {void}
+ * @throws {Error}
+ */
+function WriteJsonFile({ data, file, pretty, force }) {
+    data = data || ''
+    file = path.resolve(`${__dirname}/../${file}`)
+    pretty = pretty || true
+    force = force || false
+    if (!force && fs.existsSync(file)) {
+        throw new Error(`File exists at ${file}. Use force:true to override.`)
+    }
+    const json = !pretty
+        ? JSON.stringify(data)
+        : JSON.stringify(data, null, 4)
+    fs.writeFile(file, json, {encoding: 'utf8'}, () => {
+        console.log(`Created: ${path.basename(file)}`)
+    })
 }
 
 module.exports = { Build }

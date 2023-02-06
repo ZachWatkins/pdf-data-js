@@ -7,9 +7,12 @@
             "name": {
                 "type": "string"
             },
-            "path": {
+            "file": {
                 "type": "string",
                 "format": "uri"
+            },
+            "locked": {
+                "type": "boolean"
             },
             "sheets": {
                 "type": "array",
@@ -20,6 +23,10 @@
                         "name": {
                             "type": "string"
                         },
+                        "source": {
+                            "type": "string",
+                            "format": "uri"
+                        },
                         "select": {
                             "type": "array",
                             "uniqueItems": true,
@@ -28,10 +35,6 @@
                             }
                         },
                         "from": {
-                            "type": "string",
-                            "format": "uri"
-                        },
-                        "sheet": {
                             "type": "string"
                         },
                         "where": {
@@ -48,27 +51,29 @@
                         "orderBy": {
                             "type": "array",
                             "uniqueItems": true,
-                            "anyOf": [
-                                {
-                                    "type": "string"
-                                },
-                                {
-                                    "type": "array",
-                                    "uniqueItems": true,
-                                    "prefixItems": [
-                                        { "type": "string" },
-                                        { "enum": ["ascending", "descending", "asc", "desc", "ASC", "DESC"] }
-                                    ]
-                                }
-                            ]
+                            "items": {
+                                "anyOf": [
+                                    {
+                                        "type": "string"
+                                    },
+                                    {
+                                        "type": "array",
+                                        "uniqueItems": true,
+                                        "prefixItems": [
+                                            { "type": "string" },
+                                            { "enum": ["ascending", "descending"] }
+                                        ]
+                                    }
+                                ]
+                            }
                         }
                     },
                     "additionalProperties": false,
                     "required": [
                         "name",
+                        "source",
                         "select",
                         "from",
-                        "sheet",
                         "where",
                         "orderBy"
                     ]
@@ -78,7 +83,7 @@
         "additionalProperties": true,
         "required": [
             "name",
-            "path",
+            "file",
             "sheets"
         ]
     }

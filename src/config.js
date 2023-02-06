@@ -54,30 +54,30 @@ function childConfigKeys({ values, keys }) {
  * @param {number} [options.depthMax=0] - Maximum configuration recursion depth.
  * @param {function} [options.callback] - Function to call on this and child Config objects.
  */
-function Config(options){
-    let { defaults, values, keys, depth, depthMax, callback } = new ConfigOptions(options)
-    const ownKeys = ownConfigKeys({ keys, values })
-    const childKeys = childConfigKeys({ keys, values })
-    if (childKeys.length) {
-        this._childConfigKeys = childKeys
+class Config {
+    _childConfigKeys = []
+    constructor(options){
+        let { defaults, values, keys, depth, depthMax, callback } = new ConfigOptions(options)
+        const ownKeys = ownConfigKeys({ keys, values })
+        const childKeys = childConfigKeys({ keys, values })
+        if (childKeys.length) {
+            this._childConfigKeys = childKeys
+        }
+        ownKeys.forEach(key => this[key] = values[key])
+        if (callback) {
+            callback(this)
+        }
+        if (depth < depthMax) {
+            depth += 1
+            ownKeys.forEach(key => defaults[key] = values[key])
+            childKeys.forEach(key => {
+                const opts = { values: values[key], defaults, keys, depth, depthMax, callback }
+                this[key] = new Config(opts)
+            })
+        }
     }
-    ownKeys.forEach(key => this[key] = values[key])
-    if (callback) {
-        callback(this)
-    }
-    if (depth < depthMax) {
-        depth += 1
-        ownKeys.forEach(key => defaults[key] = values[key])
-        childKeys.forEach(key => {
-            const opts = { values: values[key], defaults, keys, depth, depthMax, callback }
-            this[key] = new Config(opts)
-        })
-    }
-}
 
-Config.prototype = {
-    _childConfigKeys: [],
-    each: function(callback){
+    each(callback) {
         callback(this)
         if (this._childConfigKeys) {
             this._childConfigKeys.forEach(key => this[key].each(callback))

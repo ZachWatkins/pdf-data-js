@@ -18,45 +18,61 @@
       "dest": "./data/nationaldatabaseofchildcareprices.xlsx",
       "force": false
     },
-    "build": {
-      "texas": {
-        "src": "./data/nationaldatabaseofchildcareprices.xlsx",
-        "sheet": "in",
-        "dest": "./data/texas.xlsx",
-        "select": [
-          "State_Name",
-          "County_Name",
-          "StudyYear",
-          "H_Under6_BothWork",
-          "H_Under6_FWork",
-          "H_Under6_MWork",
-          "H_Under6_SingleM"
-        ],
-        "where": {
-          "State_Name": "Texas"
-        },
-        "force": true
+    "build": [
+      {
+        "name": "Texas",
+        "file": "./data/texas.xlsx",
+        "locked": true,
+        "sheets": [
+          {
+            "name": "Sheet",
+            "source": "./data/nationaldatabaseofchildcareprices.xlsx",
+            "select": [
+              "State_Name",
+              "County_Name",
+              "StudyYear",
+              "H_Under6_BothWork",
+              "H_Under6_FWork",
+              "H_Under6_MWork",
+              "H_Under6_SingleM"
+            ],
+            "from": "in",
+            "where": [
+              "State_Name",
+              "Texas"
+            ]
+          }
+        ]
       },
-      "brazos": {
-        "src": "./data/texas.xlsx",
-        "sheet": "in",
-        "dest": ["./data/brazos.xlsx", "./data/brazos.json"],
-        "select": [
-          "State_Name",
-          "County_Name",
-          "StudyYear",
-          "H_Under6_BothWork",
-          "H_Under6_FWork",
-          "H_Under6_MWork",
-          "H_Under6_SingleM"
-        ],
-        "where": {
-          "State_Name": "Texas",
-          "County_Name": "Brazos County"
-        },
-        "force": true
+      {
+        "name": "Brazos",
+        "file": "./data/brazos.xlsx",
+        "sheets": [
+          {
+            "name": "Sheet",
+            "source": "./data/texas.xlsx",
+            "select": [
+              "State_Name",
+              "County_Name",
+              "StudyYear",
+              "H_Under6_BothWork",
+              "H_Under6_FWork",
+              "H_Under6_MWork",
+              "H_Under6_SingleM"
+            ],
+            "from": "Sheet",
+            "where": [
+              "County_Name",
+              "Brazos County"
+            ],
+            "orderBy": [
+              "StudyYear",
+              "descending"
+            ]
+          }
+        ]
       }
-    },
+    ],
     "pdf": {
       "url": "./public/index.html",
       "dest": "./pdf/index.pdf",
@@ -74,7 +90,7 @@
     "start": "npm run open",
     "build": "node tasks/build.js",
     "open": "node tasks/open.js",
-    "pdf:index": "node tasks/pdf-index.js"
+    "pdf": "node tasks/pdf.js"
   },
   "author": {
     "name": "Zachary Kendall Watkins",
@@ -83,7 +99,8 @@
   },
   "license": "MIT",
   "dependencies": {
-    "xlsx": "^0.18.5",
-    "puppeteer": "^19.5.2"
+    "d3": "^7.8.2",
+    "puppeteer": "^19.5.2",
+    "xlsx": "^0.18.5"
   }
 }
