@@ -47,23 +47,31 @@ class WorkBook {
         let sources = {}
         this.sheets.forEach(sheet => {
             let { name, source, select, from, where, orderBy } = sheet
-            let sheetName = name || from
+
+            // Retrieve WorkBook object.
             if (!sources[source]) {
                 sources[source] = XLSX.readFileSync(path.resolve(`${__dirname}/../${source}`))
             }
-            from = from || Object.keys(sources[source].SheetNames)[0]
+
+            if (!from) {
+                from = sources[source].SheetNames[0]
+            }
+
+            // Select rows.
             let rows = XLSX.utils.sheet_to_json(sources[source].Sheets[from])
             if (where) {
                 rows = this.where(where, rows)
             }
-            if (select) {
+            if (select && Array.isArray(select) && select.length) {
                 rows = this.select(select, rows)
             }
             if (orderBy) {
                 rows = this.orderBy(orderBy, rows)
             }
 
+            // Build files.
             const worksheet = XLSX.utils.json_to_sheet(rows)
+            let sheetName = name || from
 
             if (!workbook.Sheets[sheetName]) {
                 XLSX.utils.book_append_sheet(workbook, worksheet, sheetName)

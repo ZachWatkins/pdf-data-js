@@ -27,16 +27,6 @@
           {
             "name": "Sheet",
             "source": "./data/nationaldatabaseofchildcareprices.xlsx",
-            "select": [
-              "State_Name",
-              "County_Name",
-              "StudyYear",
-              "H_Under6_BothWork",
-              "H_Under6_FWork",
-              "H_Under6_MWork",
-              "H_Under6_SingleM"
-            ],
-            "from": "in",
             "where": [
               "State_Name",
               "Texas"
@@ -58,7 +48,10 @@
               "H_Under6_BothWork",
               "H_Under6_FWork",
               "H_Under6_MWork",
-              "H_Under6_SingleM"
+              "H_Under6_SingleM",
+              "MC18to23",
+              "MC24to29",
+              "MC36to41"
             ],
             "from": "Sheet",
             "where": [
@@ -84,10 +77,10 @@
     }
   },
   "scripts": {
-    "check-env": "node -e 'console.log(process.env)' | grep npm",
-    "download": "node tasks/download.js",
     "prestart": "npm run download && npm run build",
     "start": "npm run open",
+    "check-env": "node -e 'console.log(process.env)' | grep npm",
+    "download": "node tasks/download.js",
     "build": "node tasks/build.js",
     "open": "node tasks/open.js",
     "pdf": "node tasks/pdf.js"

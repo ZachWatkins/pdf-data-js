@@ -10,13 +10,11 @@
   </style>
   <script src="../node_modules/d3/dist/d3.min.js"></script>
   <script src="../data/brazos.sheet.js"></script>
-</head>
-<body>
-  <h1>Childcare Fact Sheet</h1>
   <script>
-    function getChart(data){
+    function getChart(data, key, label){
+      const values = data.map(d => d[key]);
       const x = d3.scaleLinear()
-        .domain([0, d3.max(data)])
+        .domain([0, d3.max(values)])
         .range([0, 420])
       // Create an empty (detached) chart container.
       const div = d3.create("div");
@@ -41,23 +39,29 @@
       barNew.style("margin", "1px");
 
       // Set the width as a function of data.
-      barNew.style("width", d => `${x(d)}px`);
+      barNew.style("width", d => `${x(d[key])}px`);
 
       // Set the text of each bar as the data.
-      barNew.text(d => d);
+      barNew.text(d => d[key]);
+      barNew.insert("span", ":first-child")
+        .text(d => d[label])
+        .style("float", "left");
 
       // Return the chart container.
       return div.node();
-    }
-    document.body.appendChild(getChart(Brazos_Sheet
-      .map(row => row.H_Under6_BothWork)));
+    }</script>
+</head>
+<body>
+  <h1>Childcare Fact Sheet</h1>
+  <h2>Brazos County households with children under 6 where both parents work</h2>
+  <script>
+    document.body.appendChild(getChart(Brazos_Sheet, 'H_Under6_BothWork', 'StudyYear'));
   </script>
-
-  <div>
-    <ul>
-      <li>Let's have some different text!</li>
-      <li>In a list!</li>
-    </ul>
-  </div>
+  <h2>Links</h2>
+  <ol>
+    <li><a href="https://www.dol.gov/sites/dolgov/files/WB/media/stats/nationaldatabaseofchildcareprices.xlsx">https://www.dol.gov/sites/dolgov/files/WB/media/stats/nationaldatabaseofchildcareprices.xlsx</a></li>
+    <li><a href="https://www.dol.gov/sites/dolgov/files/WB/media/NationalDatabaseofChildcarePricesTechnicalGuideFinal.pdf">https://www.dol.gov/sites/dolgov/files/WB/media/NationalDatabaseofChildcarePricesTechnicalGuideFinal.pdf</a></li>
+    <li><a href="https://www.dol.gov/agencies/wb/topics/childcare">https://www.dol.gov/agencies/wb/topics/childcare</a></li>
+  </ol>
 </body>
 </html>
