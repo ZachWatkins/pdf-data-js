@@ -11,6 +11,25 @@
     "node": ">=18.13.0"
   },
   "main": "index.js",
+  "scripts": {
+    "prestart": "npm install",
+    "start": "node .",
+    "download": "node tasks/download.js",
+    "build": "node tasks/build.js",
+    "open": "node tasks/open.js",
+    "pdf": "node tasks/pdf.js"
+  },
+  "author": {
+    "name": "Zachary Kendall Watkins",
+    "email": "zwatkins.it@gmail.com",
+    "url": "https://zachwatkins.dev/"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "d3": "^7.8.2",
+    "puppeteer": "^19.5.2",
+    "xlsx": "^0.18.5"
+  },
   "config": {
     "url": "public/index.html",
     "download": {
@@ -68,32 +87,12 @@
     ],
     "pdf": {
       "url": "./public/index.html",
-      "dest": "./pdf/index.pdf",
+      "dest": "./build/index.pdf",
       "options": {
         "format": "Letter",
         "printBackground": true,
         "displayHeaderFooter": false
       }
     }
-  },
-  "scripts": {
-    "prestart": "npm run download && npm run build",
-    "start": "npm run open",
-    "check-env": "node -e 'console.log(process.env)' | grep npm",
-    "download": "node tasks/download.js",
-    "build": "node tasks/build.js",
-    "open": "node tasks/open.js",
-    "pdf": "node tasks/pdf.js"
-  },
-  "author": {
-    "name": "Zachary Kendall Watkins",
-    "email": "zwatkins.it@gmail.com",
-    "url": "https://zachwatkins.dev/"
-  },
-  "license": "MIT",
-  "dependencies": {
-    "d3": "^7.8.2",
-    "puppeteer": "^19.5.2",
-    "xlsx": "^0.18.5"
   }
 }

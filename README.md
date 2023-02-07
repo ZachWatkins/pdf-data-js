@@ -15,8 +15,8 @@ The initial process involves the following steps:
 
 1. Collect Data
 2. Create Template
-3. Format Data for Template
-4. Combine Data and Template into PDF
+3. Transform Data for Template
+4. Apply Data to Template in PDF format
 
 Details to consider when managing complexity and change:
 
