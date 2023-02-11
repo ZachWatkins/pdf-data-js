@@ -1,4 +1,6 @@
-# PDF Data Visualization using JavaScript
+# Accessible PDFs Using Static Site Generation
+
+The goal of this project is to demonstrate how to build accessible PDF files locally using web frameworks, libraries, and tools.
 
 This project includes Node scripts for downloading, filtering, and converting XLSX files to JSON for use in a printable PDF file from a rendered web page. Two top-level NodeJS dependencies are used: xlsx and puppeteer.
 
@@ -99,3 +101,31 @@ Once this process is complete, it can be reduced to one steps for subsequent doc
 ## Data Source
 
 https://www.dol.gov/sites/dolgov/files/WB/media/stats/nationaldatabaseofchildcareprices.xlsx
+
+## Framework and Library Considerations
+
+I may consider implementing the following libraries and frameworks in the future depending on how the project progresses.
+
+### Static Site Generators
+
+SSGs will help with accessibility by minimizing the complexity of the final document.
+
+Options:
+
+1. SolidJS https://www.solidjs.com/
+2. Eleventy https://www.11ty.dev/docs/accessibility/ (WCAG 2.1 AA)
+3. Gatsby (React) https://www.gatsbyjs.com/accessibility-statement/ (partial WCAG 2.1 AA)
+   1. https://www.gatsbyjs.com/docs/conceptual/making-your-site-accessible  
+4. Astro https://astro.build/
+
+### Design and Component Libraries
+
+1. Material UI https://mui.com/core/ (WCAG 2.1 AA)
+2. Chakra UI (React) https://chakra-ui.com/ ()
+3. US Web Design System https://designsystem.digital.gov/documentation/accessibility/
+   1. https://github.com/uswds/uswds  
+
+## References
+
+1. https://analytics.usa.gov/
+2. https://designsystem.digital.gov/documentation/implementations/

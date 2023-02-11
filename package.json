@@ -17,7 +17,9 @@
     "download": "node tasks/download.js",
     "build": "node tasks/build.js",
     "open": "node tasks/open.js",
-    "pdf": "node tasks/pdf.js"
+    "pdf": "node tasks/pdf.js",
+    "compile": "gulp compile",
+    "watch": "gulp watch"
   },
   "author": {
     "name": "Zachary Kendall Watkins",
@@ -26,9 +28,13 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@uswds/uswds": "^3.3.0",
     "d3": "^7.8.2",
     "puppeteer": "^19.5.2",
     "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@uswds/compile": "^1.0.0"
   },
   "config": {
     "url": "public/index.html",
