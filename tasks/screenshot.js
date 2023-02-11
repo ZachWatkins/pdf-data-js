@@ -10,7 +10,7 @@ const path = require('path')
 const url = 'file://' + path.resolve(`${__dirname}/../` + (process.env.npm_config_url || process.env.npm_package_config_url))
 const dest = path.resolve(`${__dirname}/../` + (process.env.npm_package_config_pdf_dest || 'build/index.png'))
 
-screenshot({ url, ScreenshotOptions: { path: path.resolve(`${__dirname}/../build/index.png`)}})
+screenshot({ url, ScreenshotOptions: { path: path.resolve(`${__dirname}/../public/index.png`)}})
 
 async function screenshot({ url, selectors, ScreenshotOptions }) {
   const browser = await puppeteer.launch()

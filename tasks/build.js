@@ -9,7 +9,7 @@ const fs = require('fs')
 const path = require('path')
 const XLSX = require('xlsx')
 const config = require('../package.json')?.config?.build || []
-const builddir = path.resolve(`${__dirname}/../build`)
+const builddir = path.resolve(`${__dirname}/../public`)
 if (!fs.existsSync(builddir)) {
     fs.mkdirSync(builddir)
 }

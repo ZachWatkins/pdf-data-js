@@ -15,7 +15,7 @@ const osPlatform = platform()
 const path = require('path')
 const package = require('../package.json')
 const url = process.env.npm_config_url || process.env.npm_package_config_url
-const dest = path.resolve(`${__dirname}/../` + (process.env.npm_package_config_pdf_dest || './build/index.pdf'))
+const dest = path.resolve(`${__dirname}/../` + (process.env.npm_package_config_pdf_dest || './public/index.pdf'))
 const PDFOptions = { ...package.config.pdf.options, path: dest }
 
 urlToPDF({ url, PDFOptions })

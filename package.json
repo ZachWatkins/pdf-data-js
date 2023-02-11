@@ -93,7 +93,7 @@
     ],
     "pdf": {
       "url": "./public/index.html",
-      "dest": "./build/index.pdf",
+      "dest": "./public/index.pdf",
       "options": {
         "format": "Letter",
         "printBackground": true,
