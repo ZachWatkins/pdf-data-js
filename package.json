@@ -15,6 +15,7 @@
     "prestart": "npm install",
     "start": "node .",
     "download": "node tasks/download.js",
+    "snap": "node tasks/screenshot.js",
     "build": "node tasks/build.js",
     "open": "node tasks/open.js",
     "pdf": "node tasks/pdf.js",
@@ -43,62 +44,65 @@
       "dest": "./data/nationaldatabaseofchildcareprices.xlsx",
       "force": false
     },
-    "build": [
-      {
-        "name": "Texas",
-        "file": "./data/texas.xlsx",
-        "locked": true,
-        "sheets": [
-          {
-            "name": "Sheet",
-            "source": "./data/nationaldatabaseofchildcareprices.xlsx",
-            "where": [
-              "State_Name",
-              "Texas"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "Brazos",
-        "file": "./data/brazos.xlsx",
-        "sheets": [
-          {
-            "name": "Sheet",
-            "source": "./data/texas.xlsx",
-            "select": [
-              "State_Name",
-              "County_Name",
-              "StudyYear",
-              "H_Under6_BothWork",
-              "H_Under6_FWork",
-              "H_Under6_MWork",
-              "H_Under6_SingleM",
-              "MC18to23",
-              "MC24to29",
-              "MC36to41"
-            ],
-            "from": "Sheet",
-            "where": [
-              "County_Name",
-              "Brazos County"
-            ],
-            "orderBy": [
-              "StudyYear",
-              "descending"
-            ]
-          }
-        ]
-      }
-    ],
     "pdf": {
-      "url": "./public/index.html",
-      "dest": "./public/index.pdf",
+      "url": "public/index.html",
+      "dest": "public/index.pdf",
       "options": {
         "format": "Letter",
         "printBackground": true,
         "displayHeaderFooter": false
       }
+    },
+    "build": {
+      "dest": "public",
+      "workbooks": [
+        {
+          "name": "Texas",
+          "file": "./data/texas.xlsx",
+          "locked": true,
+          "sheets": [
+            {
+              "name": "Sheet",
+              "source": "./data/nationaldatabaseofchildcareprices.xlsx",
+              "where": [
+                "State_Name",
+                "Texas"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Brazos",
+          "file": "./data/brazos.xlsx",
+          "sheets": [
+            {
+              "name": "Sheet",
+              "source": "./data/texas.xlsx",
+              "select": [
+                "State_Name",
+                "County_Name",
+                "StudyYear",
+                "H_Under6_BothWork",
+                "H_Under6_FWork",
+                "H_Under6_MWork",
+                "H_Under6_SingleM",
+                "MC18to23",
+                "MC24to29",
+                "MC36to41"
+              ],
+              "from": "Sheet",
+              "where": [
+                "County_Name",
+                "Brazos County"
+              ],
+              "orderBy": [
+                "StudyYear",
+                "descending"
+              ]
+            }
+          ]
+        }
+      ]
     }
   }
 }

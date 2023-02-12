@@ -9,14 +9,20 @@
  */
 const puppeteer = require('puppeteer')
 const { platform } = require('os')
+const fs = require('fs')
+const path = require('path')
 const WINDOWS_PLATFORM = 'win32'
 const MAC_PLATFORM = 'darwin'
 const osPlatform = platform()
-const path = require('path')
-const package = require('../package.json')
 const url = process.env.npm_config_url || process.env.npm_package_config_url
-const dest = path.resolve(`${__dirname}/../` + (process.env.npm_package_config_pdf_dest || './public/index.pdf'))
-const PDFOptions = { ...package.config.pdf.options, path: dest }
+const builddir = path.resolve(`${__dirname}/../`) + process.env.npm_config_dest || process.env.npm_package_config_build_dir
+if (!fs.existsSync(builddir)) {
+    fs.mkdirSync(builddir)
+}
+const PDFOptions = {
+  ...process.env.npm_package_config_pdf_options,
+  dest: path.resolve(`${__dirname}/../${process.env.npm_package_config_pdf_dest}`)
+}
 
 urlToPDF({ url, PDFOptions })
 
@@ -27,7 +33,7 @@ urlToPDF({ url, PDFOptions })
  * @param {import('puppeteer').PDFOptions} options.PDFOptions Puppeteer options for page.pdf()
  * @returns {void|Buffer} PDF file buffer.
  */
-async function urlToPDF({ url, PDFOptions }) {
+async function urlToPDF({ url, PDFOptions, dest }) {
     if (osPlatform === MAC_PLATFORM && 0 > url.indexOf('http://')) {
       url = 'file://' + url
     }
@@ -36,13 +42,13 @@ async function urlToPDF({ url, PDFOptions }) {
     }
     const browser = await puppeteer.launch({ headless: true })
     const page = await browser.newPage()
-    await page.addStyleTag('body{-webkit-print-color-adjust:exact}')
+    await page.addStyleTag({ content: 'body{-webk it-print-color-adjust:exact}' })
     await page.emulateMediaType('screen')
     await page.goto(path.resolve(url), {waitUntil: 'networkidle0'})
     await page.setViewport({width: 1080, height: 1024})
     const pdf = await page.pdf(PDFOptions)
     await browser.close()
-    if (!options.path) {
+    if (!dest) {
         return pdf
     }
 }

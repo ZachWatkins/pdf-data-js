@@ -8,21 +8,23 @@
 const fs = require('fs')
 const path = require('path')
 const XLSX = require('xlsx')
-const config = require('../package.json')?.config?.build || []
-const builddir = path.resolve(`${__dirname}/../public`)
+const package = path.resolve(`${__dirname}/../package.json`)
+const config = package.config.build
+const builddir = path.resolve(`${__dirname}/../${config.dir}`)
 if (!fs.existsSync(builddir)) {
     fs.mkdirSync(builddir)
 }
 
-function Build(list) {
+function Build({ dest, workbooks }) {
+    const list = workbooks
     if (Array.isArray(list)) {
         list.forEach(config => {
             const workbook = new WorkBook(config)
-            workbook.build()
+            workbook.build(dest)
         })
     } else {
         const workbook = new WorkBook(list)
-        workbook.build()
+        workbook.build(dest)
     }
 }
 
@@ -42,7 +44,7 @@ class WorkBook {
         this.locked = locked || false
     }
 
-    build() {
+    build(dest) {
         const exists = fs.existsSync(this.file)
         if (exists && this.locked) {
             return

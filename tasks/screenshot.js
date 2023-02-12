@@ -7,12 +7,16 @@
  */
 const puppeteer = require('puppeteer')
 const path = require('path')
+const fs = require('fs')
 const url = 'file://' + path.resolve(`${__dirname}/../` + (process.env.npm_config_url || process.env.npm_package_config_url))
-const dest = path.resolve(`${__dirname}/../` + (process.env.npm_package_config_pdf_dest || 'build/index.png'))
+const dest = path.resolve(`${__dirname}/../${process.env.npm_config_dest || process.env.npm_package_config_build_dest}`)
+if (!fs.existsSync(dest)) {
+    fs.mkdirSync(dest)
+}
 
-screenshot({ url, ScreenshotOptions: { path: path.resolve(`${__dirname}/../public/index.png`)}})
+screenshot({ url, dest, ScreenshotOptions: { path: `${dest}/index.png`}})
 
-async function screenshot({ url, selectors, ScreenshotOptions }) {
+async function screenshot({ url, dest, selectors, ScreenshotOptions }) {
   const browser = await puppeteer.launch()
   const page = await browser.newPage()
   if (url) {
@@ -28,7 +32,7 @@ async function screenshot({ url, selectors, ScreenshotOptions }) {
       await page.waitForSelector(selector)
       const element = await page.$(selector)
       await element.screenshot({
-        path: `build/element_${i+1}.png`,
+        path: dest + `/element_${i+1}.png`,
       })
     }
   }
