@@ -29,6 +29,8 @@
   "devDependencies": {
     "@uswds/compile": "^1.0.0",
     "puppeteer": "^19.5.2",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4",
     "xlsx": "^0.18.5"
   },
   "config": {
