@@ -13,10 +13,11 @@ const options = {
     dest: process.env.npm_config_dest || process.env.npm_package_config_download_dest,
     force: process.env.npm_config_force || process.env.npm_package_config_download_force
 }
-const builddir = path.resolve(`${__dirname}/../data`)
-if (!fs.existsSync(builddir)) {
-    fs.mkdirSync(builddir)
+const dest = 'data'
+if (!fs.existsSync(dest)) {
+    fs.mkdirSync(dest)
 }
+
 download(options)
 
 /**

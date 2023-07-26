@@ -13,13 +13,11 @@ USWDS THEME CUSTOM STYLES
    sass root. Don't edit the version
    in node_modules.
 ----------------------------------------
+Custom project SASS goes here.
+
+i.e.
+@include u-padding-right('05');
+----------------------------------------
 */
 
-// @use "uswds-core" as *;
-
-body {
-   font-weight: bold;
-   p {
-      font-weight: normal;
-   }
-}
+@use "uswds-core" as *;

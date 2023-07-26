@@ -3,10 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "description": "",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/zachwatkins/pdf-data-js.git"
-  },
+  "repository": "https://github.com/zachwatkins/pdf-data-js.git",
   "engines": {
     "node": ">=18.13.0"
   },
@@ -19,25 +16,23 @@
     "build": "node tasks/build.js",
     "open": "node tasks/open.js",
     "pdf": "node tasks/pdf.js",
-    "compile": "gulp compile",
+    "compile": "gulp compile && cp src/index.html public/index.html && cp src/js/app.js public/js/app.js",
     "watch": "gulp watch"
   },
-  "author": {
-    "name": "Zachary Kendall Watkins",
-    "email": "zwatkins.it@gmail.com",
-    "url": "https://zachwatkins.dev/"
-  },
+  "author": "Zachary Kendall Watkins <zwatkins.it@gmail.com> (https://zachwatkins.dev/)",
   "license": "MIT",
   "dependencies": {
     "@uswds/uswds": "^3.3.0",
-    "d3": "^7.8.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@uswds/compile": "^1.0.0",
     "puppeteer": "^19.5.2",
     "xlsx": "^0.18.5"
   },
-  "devDependencies": {
-    "@uswds/compile": "^1.0.0"
-  },
   "config": {
+    "dest": "public",
     "url": "public/index.html",
     "download": {
       "url": "https://www.dol.gov/sites/dolgov/files/WB/media/stats/nationaldatabaseofchildcareprices.xlsx",
@@ -54,7 +49,6 @@
       }
     },
     "build": {
-      "dest": "public",
       "workbooks": [
         {
           "name": "Texas",

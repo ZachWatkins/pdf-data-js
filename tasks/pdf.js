@@ -15,9 +15,9 @@ const WINDOWS_PLATFORM = 'win32'
 const MAC_PLATFORM = 'darwin'
 const osPlatform = platform()
 const url = process.env.npm_config_url || process.env.npm_package_config_url
-const builddir = path.resolve(`${__dirname}/../`) + process.env.npm_config_dest || process.env.npm_package_config_build_dir
-if (!fs.existsSync(builddir)) {
-    fs.mkdirSync(builddir)
+const dest = process.env.npm_config_dest || process.env.npm_package_config_dest
+if (!fs.existsSync(dest)) {
+    fs.mkdirSync(dest)
 }
 const PDFOptions = {
   ...process.env.npm_package_config_pdf_options,

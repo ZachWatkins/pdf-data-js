@@ -112,11 +112,10 @@ SSGs will help with accessibility by minimizing the complexity of the final docu
 
 Options:
 
-1. SolidJS https://www.solidjs.com/
-2. Eleventy https://www.11ty.dev/docs/accessibility/ (WCAG 2.1 AA)
-3. Gatsby (React) https://www.gatsbyjs.com/accessibility-statement/ (partial WCAG 2.1 AA)
+1. Eleventy https://www.11ty.dev/docs/accessibility/ (WCAG 2.1 AA)
+2. Gatsby (React) https://www.gatsbyjs.com/accessibility-statement/ (partial WCAG 2.1 AA)
    1. https://www.gatsbyjs.com/docs/conceptual/making-your-site-accessible  
-4. Astro https://astro.build/
+3. Astro https://astro.build/
 
 ### Design and Component Libraries
 
@@ -124,8 +123,44 @@ Options:
 2. Chakra UI (React) https://chakra-ui.com/ ()
 3. US Web Design System https://designsystem.digital.gov/documentation/accessibility/
    1. https://github.com/uswds/uswds  
+4. Highcharts
 
-## References
+## Additional Links
 
 1. https://analytics.usa.gov/
 2. https://designsystem.digital.gov/documentation/implementations/
+
+## Accessibility
+
+Static data visualization accessibility is most easily achieved with a good description of the visualization as if it were an image.
+
+Interactive data visualizations are much more difficult.
+
+### Accessible Component Libraries Considered
+
+1. [USWDS](https://designsystem.digital.gov/) (U.S. General Services Administration)
+2. [Cauldron](https://cauldron.dequelabs.com/) (Deque)
+3. [Carbon Design System](https://github.com/carbon-design-system/carbon) (IBM)
+4. [Material UI](https://mui.com/) (Based on Google Material Design)
+5. [Fluent UI](https://developer.microsoft.com/en-us/fluentui) (Microsoft)
+6. [Chakra UI](https://chakra-ui.com/)
+7. [Radix UI](https://www.radix-ui.com/)
+8. [AriaKit](https://github.com/ariakit/ariakit) (successor to Reakit)
+
+No solution is future-proof. Choosing a component library trades away responsibility and gains expediency. More often than not, I prefer expediency over control and trust the component library to do its own testing for the level compliance it claims to support.
+
+USWDS (U.S. General Services Administration) would be the safest choice since it was contracted for and is used by the United States federal government for their own accessibility compliance needs.
+
+Cauldron (Deque) may be the second safest choice since it is made by a well known accessibility testing company, although usage statistics are low: [@deque/cauldron-react](https://www.npmjs.com/package/@deque/cauldron-react). It's only for React.
+
+Carbon (IBM) has data visualizations while none of the other component libraries do. It has compatibility libraries for React and Vue.
+
+Material UI is well known and also strives for WCAG 2.1 AA compliance.
+
+## Links
+
+1. https://nightingaledvs.com/writing-alt-text-for-data-visualization/
+2. https://www.urban.org/sites/default/files/2022-12/Do%20No%20Harm%20Guide%20Centering%20Accessibility%20in%20Data%20Visualization.pdf
+3. https://www.deque.com/blog/debunking-the-myth-accessibility-and-react/
+4. https://blog.webdevsimplified.com/2021-03/dynamic-module-imports/
+5. https://designsystem.digital.gov/documentation/developers/
