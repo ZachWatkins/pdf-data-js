@@ -9,8 +9,7 @@
   },
   "main": "index.js",
   "scripts": {
-    "prestart": "npm install",
-    "start": "node .",
+    "start": "vite",
     "download": "node tasks/download.js",
     "snap": "node tasks/screenshot.js",
     "build": "node tasks/build.js",
@@ -25,6 +24,7 @@
   },
   "devDependencies": {
     "puppeteer": "^19.5.2",
+    "vite": "^4.4.7",
     "xlsx": "^0.18.5"
   },
   "config": {
