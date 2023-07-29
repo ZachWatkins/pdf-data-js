@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
 });
 
 // Create Document Component
-export default function MyDocument () {
+export default function MyDocument ({ data }) {
   return (
     <Document>
       <Page size="A4" style={styles.page}>
