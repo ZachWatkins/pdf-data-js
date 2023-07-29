@@ -23,6 +23,7 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@vitejs/plugin-react": "^4.0.3",
     "puppeteer": "^19.5.2",
     "vite": "^4.4.7",
     "xlsx": "^0.18.5"
