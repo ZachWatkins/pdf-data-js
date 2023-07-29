@@ -15,19 +15,15 @@
     "snap": "node tasks/screenshot.js",
     "build": "node tasks/build.js",
     "open": "node tasks/open.js",
-    "pdf": "node tasks/pdf.js",
-    "compile": "gulp compile && cp src/index.html public/index.html && cp src/js/app.js public/js/app.js",
-    "watch": "gulp watch"
+    "pdf": "node tasks/pdf.js"
   },
   "author": "Zachary Kendall Watkins <zwatkins.it@gmail.com> (https://zachwatkins.dev/)",
   "license": "MIT",
   "dependencies": {
-    "@uswds/uswds": "^3.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@uswds/compile": "^1.0.0",
     "puppeteer": "^19.5.2",
     "xlsx": "^0.18.5"
   },
