@@ -15,9 +15,7 @@
     "snap": "node tasks/screenshot.js",
     "build": "node tasks/build.js",
     "open": "node tasks/open.js",
-    "pdf": "node tasks/pdf.js",
-    "compile": "gulp compile && cp src/index.html public/index.html && cp src/js/app.js public/js/app.js",
-    "watch": "gulp watch"
+    "pdf": "node tasks/pdf.js"
   },
   "author": "Zachary Kendall Watkins <zwatkins.it@gmail.com> (https://zachwatkins.dev/)",
   "license": "MIT",
