@@ -19,7 +19,7 @@ export default function Table({ data, sortColumn, sortOrder }) {
         if (sortByColumn === column) {
             setSortByOrder(sortByOrder === 'asc' ? 'desc' : 'asc')
         } else {
-            setsortByColumn(column)
+            setSortByColumn(column)
             setSortByOrder('asc')
         }
     }
