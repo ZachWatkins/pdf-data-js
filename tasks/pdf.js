@@ -11,52 +11,64 @@
  * External dependencies.
  */
 import puppeteer from 'puppeteer'
-import { platform } from 'os'
 import fs from 'fs'
 import path from 'path'
+import { fileURLToPath } from 'url'
+import { createServer } from 'vite'
 
-const WINDOWS_PLATFORM = 'win32'
-const MAC_PLATFORM = 'darwin'
-const osPlatform = platform()
-
-const url = process.env.npm_config_url || process.env.npm_package_config_url
+const serveDirectory = fileURLToPath(new URL('../build', import.meta.url))
+let closeServer = () => process.exit(0)
+;(async () => {
+  const server = await createServer({
+    configFile: false,
+    root: serveDirectory,
+    server: {
+      port: 1337,
+    },
+  })
+  await server.listen()
+  closeServer = () => server.close() && process.exit(0)
+})()
 
 urlToPDF({
-  url,
+  url: 'http://localhost:1337',
   PDFOptions: {
     path: process.env.npm_package_config_pdf_options_path,
     displayHeaderFooter: Boolean(process.env.npm_package_config_pdf_options_displayHeaderFooter || false),
     format: process.env.npm_package_config_pdf_options_format || 'Letter',
     printBackground: Boolean(process.env.npm_package_config_pdf_options_printBackground || true),
   },
+  callback: closeServer,
 })
 
 /**
  * Create a PDF file from a URL.
  * @param {object} options
- * @param {string} options.url - Web page to print.
+ * @param {string} options.url - Fully qualified URL of a file or web page to print.
  * @param {import('puppeteer').PDFOptions} options.PDFOptions - Puppeteer options for page.pdf()
- * @param {boolean} options.dest - Destination path for the PDF file.
+ * @param {function} options.callback - Callback function to execute after PDF is created.
  * @returns {void|Buffer} PDF file buffer.
  */
-async function urlToPDF({ url, PDFOptions, dest }) {
-    if (0 > url.indexOf('http://')) {
-      url = osPlatform === MAC_PLATFORM ? 'file://' + process.cwd() + path.sep + url : process.cwd() + path.sep + url
+async function urlToPDF({ url, PDFOptions, callback }) {
+
+  if (PDFOptions.path) {
+    if (!fs.existsSync(PDFOptions.path)) {
+      fs.mkdirSync(path.dirname(PDFOptions.path))
     }
-    if (PDFOptions.path) {
-      PDFOptions.path = path.resolve(PDFOptions.path)
-    }
-    console.log(PDFOptions)
-    const browser = await puppeteer.launch({ headless: "new" })
-    const page = await browser.newPage()
-    await page.addStyleTag({ content: 'body{-webkit-print-color-adjust:exact}' })
-    await page.emulateMediaType('screen')
-    await page.goto(path.resolve(url), {waitUntil: 'networkidle0'})
-    await page.setViewport({width: 1080, height: 1024})
-    const pdf = await page.pdf(PDFOptions)
-    await browser.close()
-    console.log(pdf)
-    if (!dest) {
-        return pdf
-    }
+  }
+
+  const browser = await puppeteer.launch({ headless: "new" })
+  const page = await browser.newPage()
+
+  await page.addStyleTag({ content: 'body{-webkit-print-color-adjust:exact}' })
+  await page.emulateMediaType('screen')
+  await page.goto(url, {waitUntil: 'networkidle0'})
+  await page.setViewport({width: 1080, height: 1024})
+
+  const pdf = await page.pdf(PDFOptions)
+
+  await browser.close()
+
+  return callback()
+
 }
