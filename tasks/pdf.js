@@ -52,7 +52,7 @@ urlToPDF({
 async function urlToPDF({ url, PDFOptions, callback }) {
 
   if (PDFOptions.path) {
-    if (!fs.existsSync(PDFOptions.path)) {
+    if (!fs.existsSync(path.dirname(PDFOptions.path))) {
       fs.mkdirSync(path.dirname(PDFOptions.path))
     }
   }
