@@ -13,35 +13,35 @@
     "start": "vite",
     "download": "node tasks/download.js",
     "snap": "node tasks/screenshot.js",
-    "build": "node tasks/build.js",
+    "build": "vite build",
+    "build:data": "node tasks/build.js",
+    "build:pdf": "node tasks/pdf.js",
     "open": "node tasks/open.js",
-    "pdf": "node tasks/pdf.js"
+    "preview": "vite preview"
   },
   "author": "Zachary Kendall Watkins <zwatkins.it@gmail.com> (https://zachwatkins.dev/)",
   "license": "MIT",
   "dependencies": {
-    "@react-pdf/renderer": "^3.1.12",
+    "puppeteer": "^20.9.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.0.3",
-    "puppeteer": "^19.5.2",
     "vite": "^4.4.7",
     "xlsx": "^0.18.5"
   },
   "config": {
-    "dest": "public",
-    "url": "public/index.html",
+    "dest": "build",
+    "url": "index.html",
     "download": {
       "url": "https://www.dol.gov/sites/dolgov/files/WB/media/stats/nationaldatabaseofchildcareprices.xlsx",
       "dest": "./data/nationaldatabaseofchildcareprices.xlsx",
       "force": false
     },
     "pdf": {
-      "url": "public/index.html",
-      "dest": "public/index.pdf",
       "options": {
+        "path": "pdf/index.pdf",
         "format": "Letter",
         "printBackground": true,
         "displayHeaderFooter": false
