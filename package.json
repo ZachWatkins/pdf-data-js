@@ -30,17 +30,17 @@
     "xlsx": "^0.18.5"
   },
   "config": {
-    "dest": "public",
-    "url": "public/index.html",
+    "dest": "build",
+    "url": "index.html",
     "download": {
       "url": "https://www.dol.gov/sites/dolgov/files/WB/media/stats/nationaldatabaseofchildcareprices.xlsx",
       "dest": "./data/nationaldatabaseofchildcareprices.xlsx",
       "force": false
     },
     "pdf": {
-      "url": "public/index.html",
-      "dest": "public/index.pdf",
+      "url": "index.html",
       "options": {
+        "path": "build/index.pdf",
         "format": "Letter",
         "printBackground": true,
         "displayHeaderFooter": false
