@@ -69,6 +69,6 @@ async function urlToPDF({ url, PDFOptions, callback }) {
 
   await browser.close()
 
-  return callback()
+  callback()
 
 }
