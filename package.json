@@ -13,9 +13,11 @@
     "start": "vite",
     "download": "node tasks/download.js",
     "snap": "node tasks/screenshot.js",
-    "build": "node tasks/build.js",
+    "build": "vite build",
+    "build:data": "node tasks/build.js",
+    "build:pdf": "node tasks/pdf.js",
     "open": "node tasks/open.js",
-    "pdf": "node tasks/pdf.js"
+    "preview": "vite preview"
   },
   "author": "Zachary Kendall Watkins <zwatkins.it@gmail.com> (https://zachwatkins.dev/)",
   "license": "MIT",
@@ -38,9 +40,8 @@
       "force": false
     },
     "pdf": {
-      "url": "index.html",
       "options": {
-        "path": "build/index.pdf",
+        "path": "pdf/index.pdf",
         "format": "Letter",
         "printBackground": true,
         "displayHeaderFooter": false
