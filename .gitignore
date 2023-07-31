@@ -1,4 +1,4 @@
 node_modules/
-data/*
-build/*
-pdf/*
+data
+build
+pdf
