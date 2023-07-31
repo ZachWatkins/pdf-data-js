@@ -17,7 +17,9 @@
     "build:data": "node tasks/build.js",
     "build:pdf": "node tasks/pdf.js",
     "open": "node tasks/open.js",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint": "prettier --check --config .config/.prettierrc.json --ignore-path .config/.prettierignore .",
+    "format": "prettier --write --config .config/.prettierrc.json --ignore-path .config/.prettierignore ."
   },
   "author": "Zachary Kendall Watkins <zwatkins.it@gmail.com> (https://zachwatkins.dev/)",
   "license": "MIT",
@@ -28,6 +30,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.0.3",
+    "prettier": "^3.0.0",
     "vite": "^4.4.7",
     "xlsx": "^0.18.5"
   },

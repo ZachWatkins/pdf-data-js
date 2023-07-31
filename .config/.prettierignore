@@ -1,0 +1,7 @@
+.cache
+package-lock.json
+LICENSE.md
+docs
+build
+data
+README.md
