@@ -16,7 +16,7 @@
     "build": "vite build",
     "build:data": "node tasks/build.js",
     "build:pdf": "node tasks/pdf.js",
-    "open": "node tasks/open.js",
+    "open": "node tasks/open.js --url=build/index.html",
     "preview": "vite preview",
     "lint": "prettier --check --config .config/.prettierrc.json --ignore-path .config/.prettierignore .",
     "format": "prettier --write --config .config/.prettierrc.json --ignore-path .config/.prettierignore ."
@@ -36,7 +36,6 @@
   },
   "config": {
     "dest": "build",
-    "url": "index.html",
     "download": {
       "url": "https://www.dol.gov/sites/dolgov/files/WB/media/stats/nationaldatabaseofchildcareprices.xlsx",
       "dest": "data/nationaldatabaseofchildcareprices.xlsx",
