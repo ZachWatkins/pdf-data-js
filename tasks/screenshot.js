@@ -8,13 +8,22 @@
 const puppeteer = require('puppeteer')
 const path = require('path')
 const fs = require('fs')
-const url = 'file://' + path.resolve(`${__dirname}/../` + (process.env.npm_config_url || process.env.npm_package_config_url))
-const dest = path.resolve(`${__dirname}/../${process.env.npm_config_dest || process.env.npm_package_config_build_dest}`)
+const url =
+  'file://' +
+  path.resolve(
+    `${__dirname}/../` +
+      (process.env.npm_config_url || process.env.npm_package_config_url)
+  )
+const dest = path.resolve(
+  `${__dirname}/../${
+    process.env.npm_config_dest || process.env.npm_package_config_build_dest
+  }`
+)
 if (!fs.existsSync(dest)) {
-    fs.mkdirSync(dest)
+  fs.mkdirSync(dest)
 }
 
-screenshot({ url, dest, ScreenshotOptions: { path: `${dest}/index.png`}})
+screenshot({ url, dest, ScreenshotOptions: { path: `${dest}/index.png` } })
 
 async function screenshot({ url, dest, selectors, ScreenshotOptions }) {
   const browser = await puppeteer.launch()
@@ -32,7 +41,7 @@ async function screenshot({ url, dest, selectors, ScreenshotOptions }) {
       await page.waitForSelector(selector)
       const element = await page.$(selector)
       await element.screenshot({
-        path: dest + `/element_${i+1}.png`,
+        path: dest + `/element_${i + 1}.png`,
       })
     }
   }

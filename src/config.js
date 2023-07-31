@@ -22,24 +22,24 @@
  * @prop {function|null} callback - Function to call on this and child Config objects.
  */
 class ConfigOptions {
-    constructor(options) {
-        this.defaults = options.defaults || {}
-        this.values = ! options.values
-            ? options.defaults
-            : { ...options.defaults, ...options.values }
-        this.keys = options.keys || Object.keys(this.values)
-        this.depth = options.depth || 0
-        this.depthMax = options.depthMax || 0
-        this.callback = options.callback || null
-    }
+  constructor(options) {
+    this.defaults = options.defaults || {}
+    this.values = !options.values
+      ? options.defaults
+      : { ...options.defaults, ...options.values }
+    this.keys = options.keys || Object.keys(this.values)
+    this.depth = options.depth || 0
+    this.depthMax = options.depthMax || 0
+    this.callback = options.callback || null
+  }
 }
 
 function ownConfigKeys({ keys, values }) {
-    return keys.filter(key => values.hasOwnProperty(key))
+  return keys.filter((key) => values.hasOwnProperty(key))
 }
 
 function childConfigKeys({ values, keys }) {
-    return Object.keys(values).filter(key => -1 === keys.indexOf(key))
+  return Object.keys(values).filter((key) => -1 === keys.indexOf(key))
 }
 
 /**
@@ -55,34 +55,42 @@ function childConfigKeys({ values, keys }) {
  * @param {function} [options.callback] - Function to call on this and child Config objects.
  */
 class Config {
-    _childConfigKeys = []
-    constructor(options){
-        let { defaults, values, keys, depth, depthMax, callback } = new ConfigOptions(options)
-        const ownKeys = ownConfigKeys({ keys, values })
-        const childKeys = childConfigKeys({ keys, values })
-        if (childKeys.length) {
-            this._childConfigKeys = childKeys
-        }
-        ownKeys.forEach(key => this[key] = values[key])
-        if (callback) {
-            callback(this)
-        }
-        if (depth < depthMax) {
-            depth += 1
-            ownKeys.forEach(key => defaults[key] = values[key])
-            childKeys.forEach(key => {
-                const opts = { values: values[key], defaults, keys, depth, depthMax, callback }
-                this[key] = new Config(opts)
-            })
-        }
+  _childConfigKeys = []
+  constructor(options) {
+    let { defaults, values, keys, depth, depthMax, callback } =
+      new ConfigOptions(options)
+    const ownKeys = ownConfigKeys({ keys, values })
+    const childKeys = childConfigKeys({ keys, values })
+    if (childKeys.length) {
+      this._childConfigKeys = childKeys
     }
+    ownKeys.forEach((key) => (this[key] = values[key]))
+    if (callback) {
+      callback(this)
+    }
+    if (depth < depthMax) {
+      depth += 1
+      ownKeys.forEach((key) => (defaults[key] = values[key]))
+      childKeys.forEach((key) => {
+        const opts = {
+          values: values[key],
+          defaults,
+          keys,
+          depth,
+          depthMax,
+          callback,
+        }
+        this[key] = new Config(opts)
+      })
+    }
+  }
 
-    each(callback) {
-        callback(this)
-        if (this._childConfigKeys) {
-            this._childConfigKeys.forEach(key => this[key].each(callback))
-        }
+  each(callback) {
+    callback(this)
+    if (this._childConfigKeys) {
+      this._childConfigKeys.forEach((key) => this[key].each(callback))
     }
+  }
 }
 
 module.exports = { Config }

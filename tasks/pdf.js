@@ -34,9 +34,13 @@ urlToPDF({
   url: 'http://localhost:1337',
   PDFOptions: {
     path: process.env.npm_package_config_pdf_options_path,
-    displayHeaderFooter: Boolean(process.env.npm_package_config_pdf_options_displayHeaderFooter || false),
+    displayHeaderFooter: Boolean(
+      process.env.npm_package_config_pdf_options_displayHeaderFooter || false
+    ),
     format: process.env.npm_package_config_pdf_options_format || 'Letter',
-    printBackground: Boolean(process.env.npm_package_config_pdf_options_printBackground || true),
+    printBackground: Boolean(
+      process.env.npm_package_config_pdf_options_printBackground || true
+    ),
   },
   callback: closeServer,
 })
@@ -50,25 +54,23 @@ urlToPDF({
  * @returns {void|Buffer} PDF file buffer.
  */
 async function urlToPDF({ url, PDFOptions, callback }) {
-
   if (PDFOptions.path) {
     if (!fs.existsSync(path.dirname(PDFOptions.path))) {
       fs.mkdirSync(path.dirname(PDFOptions.path))
     }
   }
 
-  const browser = await puppeteer.launch({ headless: "new" })
+  const browser = await puppeteer.launch({ headless: 'new' })
   const page = await browser.newPage()
 
   await page.addStyleTag({ content: 'body{-webkit-print-color-adjust:exact}' })
   await page.emulateMediaType('screen')
-  await page.goto(url, {waitUntil: 'networkidle0'})
-  await page.setViewport({width: 1080, height: 1024})
+  await page.goto(url, { waitUntil: 'networkidle0' })
+  await page.setViewport({ width: 1080, height: 1024 })
 
   const pdf = await page.pdf(PDFOptions)
 
   await browser.close()
 
   callback()
-
 }
