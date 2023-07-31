@@ -1,90 +1,79 @@
 {
-    "workbookConfig": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "https://zachwatkins.dev/schemas/workbookschema.json",
-        "type": "object",
-        "properties": {
+  "workbookConfig": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://zachwatkins.dev/schemas/workbookschema.json",
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "file": {
+        "type": "string",
+        "format": "uri"
+      },
+      "locked": {
+        "type": "boolean"
+      },
+      "sheets": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "type": "object",
+          "properties": {
             "name": {
+              "type": "string"
+            },
+            "source": {
+              "type": "string",
+              "format": "uri"
+            },
+            "select": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
                 "type": "string"
+              }
             },
-            "file": {
-                "type": "string",
-                "format": "uri"
+            "from": {
+              "type": "string"
             },
-            "locked": {
-                "type": "boolean"
-            },
-            "sheets": {
+            "where": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
                 "type": "array",
-                "minItems": 1,
                 "items": {
-                    "type": "object",
-                    "properties": {
-                        "name": {
-                            "type": "string"
-                        },
-                        "source": {
-                            "type": "string",
-                            "format": "uri"
-                        },
-                        "select": {
-                            "type": "array",
-                            "uniqueItems": true,
-                            "items": {
-                                "type": "string"
-                            }
-                        },
-                        "from": {
-                            "type": "string"
-                        },
-                        "where": {
-                            "type": "array",
-                            "uniqueItems": true,
-                            "items": {
-                                "type": "array",
-                                "items": {
-                                    "type": "string",
-                                    "uniqueItems": true
-                                }
-                            }
-                        },
-                        "orderBy": {
-                            "type": "array",
-                            "uniqueItems": true,
-                            "items": {
-                                "anyOf": [
-                                    {
-                                        "type": "string"
-                                    },
-                                    {
-                                        "type": "array",
-                                        "uniqueItems": true,
-                                        "prefixItems": [
-                                            { "type": "string" },
-                                            { "enum": ["ascending", "descending"] }
-                                        ]
-                                    }
-                                ]
-                            }
-                        }
-                    },
-                    "additionalProperties": false,
-                    "required": [
-                        "name",
-                        "source",
-                        "select",
-                        "from",
-                        "where",
-                        "orderBy"
-                    ]
+                  "type": "string",
+                  "uniqueItems": true
                 }
+              }
+            },
+            "orderBy": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "array",
+                    "uniqueItems": true,
+                    "prefixItems": [
+                      { "type": "string" },
+                      { "enum": ["ascending", "descending"] }
+                    ]
+                  }
+                ]
+              }
             }
-        },
-        "additionalProperties": true,
-        "required": [
-            "name",
-            "file",
-            "sheets"
-        ]
-    }
+          },
+          "additionalProperties": false,
+          "required": ["name", "source", "select", "from", "where", "orderBy"]
+        }
+      }
+    },
+    "additionalProperties": true,
+    "required": ["name", "file", "sheets"]
+  }
 }
