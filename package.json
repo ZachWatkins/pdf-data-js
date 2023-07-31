@@ -39,7 +39,7 @@
     "url": "index.html",
     "download": {
       "url": "https://www.dol.gov/sites/dolgov/files/WB/media/stats/nationaldatabaseofchildcareprices.xlsx",
-      "dest": "./data/nationaldatabaseofchildcareprices.xlsx",
+      "dest": "data/nationaldatabaseofchildcareprices.xlsx",
       "force": false
     },
     "pdf": {
