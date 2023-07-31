@@ -5,9 +5,9 @@
  * @created 2023-02-06 9:35PM CST
  * @package @zachwatkins/pdf-data-js
  */
-const https = require('https')
-const fs = require('fs')
-const path = require('path')
+import https from 'https'
+import fs from 'fs'
+import path from 'path'
 const options = {
   url:
     process.env.npm_config_url || process.env.npm_package_config_download_url,

@@ -5,12 +5,13 @@
  * @created 2023-02-06 9:42PM CST
  * @package @zachwatkins/pdf-data-js
  */
-const { platform } = require('os')
-const { exec } = require('child_process')
+import { platform } from 'os'
+import { exec } from 'child_process'
 const WINDOWS_PLATFORM = 'win32'
 const MAC_PLATFORM = 'darwin'
 const osPlatform = platform()
-const url = process.env.npm_config_url || process.env.npm_package_config_url
+const url =
+  process.env.npm_config_url || process.env.npm_package_config_open_url
 let command = 'google-chrome --no-sandbox'
 if (osPlatform === WINDOWS_PLATFORM) {
   command = 'start'

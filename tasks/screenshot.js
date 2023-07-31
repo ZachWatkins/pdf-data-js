@@ -5,9 +5,12 @@
  * @package @zachwatkins/pdf-data-js
  * @see https://pptr.dev/api/puppeteer.page.screenshot
  */
-const puppeteer = require('puppeteer')
-const path = require('path')
-const fs = require('fs')
+import puppeteer from 'puppeteer'
+import path from 'path'
+import fs from 'fs'
+import { fileURLToPath } from 'url'
+const __dirname = fileURLToPath(new URL('./', import.meta.url))
+
 const url =
   'file://' +
   path.resolve(
