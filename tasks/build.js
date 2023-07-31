@@ -5,10 +5,14 @@
  * @created 2023-01-24 9:53PM CST
  * @package @zachwatkins/pdf-data-js
  */
-const fs = require('fs')
-const path = require('path')
-const XLSX = require('xlsx')
-const package = require('../package.json')
+import fs from 'fs'
+import path from 'path'
+import XLSX from 'xlsx'
+import { fileURLToPath } from 'url'
+const __dirname = fileURLToPath(new URL('./', import.meta.url))
+const packageJSON = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../package.json'), 'utf8')
+)
 
 function Build({ workbooks }) {
   const list = workbooks
@@ -214,4 +218,4 @@ function WriteJsonFile({ data, file, pretty, force }) {
   })
 }
 
-Build(package.config.build)
+Build(packageJSON.config.build)
