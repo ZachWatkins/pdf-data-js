@@ -2,3 +2,5 @@
 package-lock.json
 LICENSE.md
 docs
+build
+data
