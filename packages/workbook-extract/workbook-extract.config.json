@@ -1,0 +1,25 @@
+{
+  "workbook": "example/data.xlsx",
+  "extract": [
+    {
+      "target": "build/page1.json",
+      "sheet": "in",
+      "query": {
+        "select": [
+          "State_Name",
+          "County_Name",
+          "StudyYear",
+          "H_Under6_BothWork",
+          "H_Under6_FWork",
+          "H_Under6_MWork",
+          "H_Under6_SingleM",
+          "MC18to23",
+          "MC24to29",
+          "MC36to41"
+        ],
+        "where": [["County_Name", "=", "Brazos County"]],
+        "orderBy": ["StudyYear", "desc"]
+      }
+    }
+  ]
+}

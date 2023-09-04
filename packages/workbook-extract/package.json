@@ -1,0 +1,31 @@
+{
+  "name": "@zachwatkins/workbook-extract",
+  "version": "0.1.0",
+  "description": "Utility to extract data from a workbook and save it to other file types.",
+  "author": "Zachary K. Watkins",
+  "license": "MIT",
+  "type": "module",
+  "keywords": [
+    "workbook",
+    "etl",
+    "cli"
+  ],
+  "homepage": "https://github.com/ZachWatkins/pdf-data-js/tree/HEAD/packages/workbook-extract/README.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ZachWatkins/pdf-data-js.git",
+    "directory": "packages/workbook-extract"
+  },
+  "bugs": {
+    "url": "https://github.com/ZachWatkins/pdf-data-js/issues"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "json-to-zod": "^1.1.2",
+    "xlsx": "^0.18.5",
+    "zod": "^3.22.2"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "file": "extract.json",
+  "use": "workbook.xlsx",
+  "select": ["*"],
+  "from": "Page 1",
+  "join": [
+    {
+      "from": "Page 2",
+      "on": ["Page 1.year", "Page 2.year"],
+      "select": ["*"]
+    }
+  ],
+  "where": ["year", "2022"],
+  "orderBy": ["year", "DESC"]
+}

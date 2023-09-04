@@ -1,0 +1,8 @@
+{
+  "file": "extract.json",
+  "use": "workbook.xlsx",
+  "select": ["*"],
+  "from": "Page 1",
+  "where": ["year", "2022"],
+  "orderBy": ["year", "DESC"]
+}
