@@ -12,7 +12,9 @@ import fs from 'fs'
  * @param {mixed} data
  * @returns {string} - The schema file contents.
  */
-function ToSchemaFile(data) {
+export function ToSchemaFile(data) {
   const schema = jsonToZod(data)
   return schema
 }
+
+export default { ToSchemaFile }
