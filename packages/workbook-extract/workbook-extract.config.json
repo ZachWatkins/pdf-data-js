@@ -18,7 +18,7 @@
           "MC36to41"
         ],
         "where": [["County_Name", "=", "Brazos County"]],
-        "orderBy": ["StudyYear", "desc"]
+        "orderBy": [["StudyYear", "desc"]]
       }
     }
   ]
