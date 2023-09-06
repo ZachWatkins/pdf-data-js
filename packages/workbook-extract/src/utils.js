@@ -59,4 +59,17 @@ export function createFile({ data, target, sheet }) {
   throw new Error(`Invalid file type: ${fileType}, received: ${target}`)
 }
 
-export default { createFile, log }
+/**
+ * Whether or not to create an extract item's file.
+ * @param {object} extractItem - Extract item from config.
+ * @param {boolean} override - Whether or not to override existing files.
+ * @return {boolean} - Whether or not to create the file.
+ */
+export function shouldCreateFile(extractItem, override) {
+  if (!fs.existsSync(extractItem.target)) {
+    return true
+  }
+  return override ? true : false
+}
+
+export default { createFile, log, shouldCreateFile }

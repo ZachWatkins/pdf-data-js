@@ -2,7 +2,7 @@
   "workbook": "example/data.xlsx",
   "extract": [
     {
-      "target": "build/page1.xlsx",
+      "target": "build/brazos-valley.xlsx",
       "sheet": "in",
       "query": {
         "select": [
@@ -22,7 +22,7 @@
       }
     },
     {
-      "workbook": "build/page1.xlsx",
+      "workbook": "build/brazos-valley.xlsx",
       "target": "build/page1.json",
       "sheet": "in",
       "query": {

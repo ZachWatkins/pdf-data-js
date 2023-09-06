@@ -21,6 +21,7 @@ Commands:
 
 Options:
   --config <file>   Configuration file path.
+  --override        Override existing target files. Default is false.
   --verbose         Display verbose output.
   --help            Display this help message.
 `

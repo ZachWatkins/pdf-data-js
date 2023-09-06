@@ -13,12 +13,21 @@ import path from 'path'
  * @param {string} options.workbook - Path to workbook file.
  * @param {boolean} options.help - Display help message.
  * @param {boolean} options.verbose - Display verbose output.
+ * @param {boolean} options.override - Override existing target files.
  * @param {string} options.command - Command to execute.
  * @param {string} options.config - Path to configuration file.
  */
-export default function Args({ workbook, help, verbose, command, config }) {
+export default function Args({
+  workbook,
+  help,
+  verbose,
+  override,
+  command,
+  config,
+}) {
   this.help = false
   this.verbose = false
+  this.override = false
   this.command = 'run'
   this.config = ''
 
@@ -42,6 +51,9 @@ export default function Args({ workbook, help, verbose, command, config }) {
     if (process.argv.includes('--verbose')) {
       this.verbose = true
     }
+    if (process.argv.includes('--override')) {
+      this.override = true
+    }
     if (process.argv.includes('--config')) {
       this.config = process.argv[process.argv.indexOf('--config') + 1]
     }
@@ -59,6 +71,9 @@ export default function Args({ workbook, help, verbose, command, config }) {
   }
   if (typeof verbose === 'boolean') {
     this.verbose = verbose
+  }
+  if (typeof override === 'boolean') {
+    this.override = override
   }
   if (typeof config === 'string') {
     this.config = config
@@ -91,6 +106,9 @@ export default function Args({ workbook, help, verbose, command, config }) {
           this.workbook = path.resolve(this.config.workbook)
         }
       }
+    }
+    if (typeof this.config.override === 'boolean') {
+      this.override = this.config.override
     }
   }
 }

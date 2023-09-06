@@ -205,6 +205,11 @@ export function run({ workbook, config, verbose }) {
   if (config && config.extract) {
     for (let i = 0; i < config.extract.length; i++) {
       const extract = config.extract[i]
+
+      if (!utils.shouldCreateFile(extract, config.override)) {
+        continue
+      }
+
       if (extract.workbook) {
         workbook = extract.workbook
       }
