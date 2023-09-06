@@ -5,7 +5,6 @@
  */
 
 import { jsonToZod } from 'json-to-zod'
-import fs from 'fs'
 
 /**
  * Return the schema file contents for a Zod schema file that validates the given data set.

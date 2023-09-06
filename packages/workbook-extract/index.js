@@ -7,7 +7,7 @@
 import Args from './src/args.js'
 import XLSX from 'xlsx'
 // import Schema from './src/sql-create-table.js'
-import run from './src/run.js'
+import { run } from './src/run.js'
 import { ToSchemaFile } from './src/schema.js'
 import utils from './src/utils.js'
 import fs from 'fs'
@@ -36,20 +36,17 @@ if (ARGS.help) {
 }
 
 if ('run' === ARGS.command) {
-  if (ARGS.verbose) {
-    console.log('Running workbook-extract.')
-  }
   run(ARGS)
 }
 
 if ('schema' === ARGS.command) {
-  if (ARGS.verbose) {
-    console.log('Creating schema file.')
-  }
+  utils.log(ARGS.verbose, 'Creating schema file.')
+
   const workbook = XLSX.readFile(ARGS.workbook)
   const sheet = workbook.Sheets[ARGS.sheet]
-  const data = XLSX.utils.sheet_to_json(sheet)
+  const data = XLSX.utils
+    .sheet_to_json(sheet)
+    .filter((row) => row.County_Name === 'Brazos County')
   const schema = ToSchemaFile(data)
-  console.log(schema)
   fs.writeFileSync('schema.js', schema)
 }

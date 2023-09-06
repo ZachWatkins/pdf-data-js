@@ -4,9 +4,9 @@
  * @year 2023
  */
 
-import fs from 'fs'
 import path from 'path'
 import XLSX from 'xlsx'
+import utils from './utils.js'
 
 function log(verbose, ...message) {
   if (verbose) {
@@ -151,47 +151,38 @@ function makeOrderByQuery(clause, rows) {
   }
 }
 
-function createJsonFile(data, target) {
-  if (fs.existsSync(target)) {
-    fs.unlinkSync(target)
-  }
-  if (!fs.existsSync(path.dirname(target))) {
-    fs.mkdirSync(path.dirname(target))
-  }
-  fs.writeFileSync(target, JSON.stringify(data, null, 4))
-}
-
-function runExtract(workbook, sheet, target) {
-  log(verbose, 'Loading', path.basename(workbook))
+function runExtract({ workbook, sheet, verbose }) {
+  log(verbose, 'Reading', workbook.replace(process.cwd() + path.sep, ''))
 
   const wb = XLSX.readFile(workbook)
 
   log(verbose, 'Workbook loaded, converting sheet to JSON...')
 
-  const data = XLSX.utils.sheet_to_json(wb.Sheets[sheet])
-
-  log(verbose, 'Sheet converted to JSON, writing to file...')
-
-  createJsonFile(data, target)
+  return XLSX.utils.sheet_to_json(wb.Sheets[sheet])
 }
 
-function runQueriedExtract(workbook, sheet, query, target) {
-  log(verbose, 'Loading', path.basename(workbook))
+function runQueriedExtract({ workbook, sheet, query, verbose }) {
+  log(verbose, 'Reading', workbook.replace(process.cwd() + path.sep, ''))
 
   const wb = XLSX.readFile(workbook)
 
-  log(verbose, 'Workbook loaded, converting sheet to JSON...')
+  log(verbose, 'Workbook opened, querying...')
 
-  const data =
-    query.where && query.where.length
-      ? XLSX.utils.sheet_to_json(wb.Sheets[sheet]).filter(makeWhereQuery(query))
-      : XLSX.utils.sheet_to_json(wb.Sheets[sheet])
+  let data = XLSX.utils.sheet_to_json(wb.Sheets[sheet])
+
+  if (query.where && query.where.length) {
+    let len = data.length
+    data = data.filter(makeWhereQuery(query.where))
+    log(verbose, `${len - data.length} rows filtered.`)
+  }
 
   if (query.select) {
     const select = makeSelectQuery(query.select)
+    let len = Object.keys(data[0]).length
     for (let i = 0; i < data.length; i++) {
       data[i] = select(data[i])
     }
+    log(verbose, `${Object.keys(data[0]).length} of ${len} columns selected.`)
   }
 
   if (query.orderBy && query.orderBy.length) {
@@ -201,29 +192,35 @@ function runQueriedExtract(workbook, sheet, query, target) {
         clause.push('asc')
       }
       data.sort(makeOrderByQuery(query.orderBy, data))
+      log(verbose, `Sorted by ${clause[0]} ${clause[1]}.`)
     }
   }
 
-  log(verbose, 'Sheet converted to JSON, writing to file...')
+  log(verbose, `Query complete, returning ${data.length} rows.`)
 
-  createJsonFile(data, target)
+  return data
 }
 
 export function run({ workbook, config, verbose }) {
   if (config && config.extract) {
     for (let i = 0; i < config.extract.length; i++) {
-      if (!extract.query) {
-        runExtract(workbook, extract.sheet, extract.target)
-      } else {
-        runQueriedExtract(
-          workbook,
-          extract.sheet,
-          extract.query,
-          extract.target
-        )
+      const extract = config.extract[i]
+      if (extract.workbook) {
+        workbook = extract.workbook
       }
+      const data = extract.query
+        ? runQueriedExtract({
+            ...extract,
+            workbook,
+            verbose,
+          })
+        : runExtract({ ...extract, workbook, verbose })
 
-      log(verbose, `JSON written to file: ${extract.target}`)
+      log(verbose, 'Data extracted, writing to file at', extract.target)
+
+      utils.createFile({ ...extract, data })
+
+      log(verbose, `File created: ${extract.target.replace(process.cwd(), '')}`)
     }
   }
 }
