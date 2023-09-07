@@ -1,0 +1,31 @@
+{
+  "name": "@zachwatkins/xlsx-to-zod",
+  "version": "0.1.0",
+  "description": "Package to generate Zod schemas for workbook sheets.",
+  "author": "Zachary K. Watkins",
+  "license": "MIT",
+  "type": "module",
+  "keywords": [
+    "workbook",
+    "etl",
+    "cli"
+  ],
+  "homepage": "https://github.com/ZachWatkins/pdf-data-js/tree/HEAD/packages/xlsx-to-zod/README.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ZachWatkins/pdf-data-js.git",
+    "directory": "packages/xlsx-to-zod"
+  },
+  "bugs": {
+    "url": "https://github.com/ZachWatkins/pdf-data-js/issues"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "json-to-zod": "^1.1.2",
+    "xlsx": "^0.18.5",
+    "zod": "^3.22.2"
+  }
+}

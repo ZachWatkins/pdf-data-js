@@ -1,0 +1,9 @@
+{
+  "workbook": "example/data.xlsx",
+  "schemas": [
+    {
+      "target": "build/brazos-valley-schema.js",
+      "sheet": "in"
+    }
+  ]
+}
