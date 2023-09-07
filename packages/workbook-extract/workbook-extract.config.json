@@ -1,5 +1,12 @@
 {
   "workbook": "example/data.xlsx",
+  "schema": [
+    {
+      "workbook": "build/brazos-valley.xlsx",
+      "target": "build/brazos-valley-schema.js",
+      "sheet": "in"
+    }
+  ],
   "extract": [
     {
       "target": "build/brazos-valley.xlsx",
