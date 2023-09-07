@@ -20,25 +20,23 @@ import z from 'zod'
 
 /**
  * Return the schema file contents for a Zod schema file that validates the given data set.
- * @param {mixed} data
+ * @param {mixed} data - The data to convert to a schema file.
+ * @param {string} target - The schema file path to write.
+ * @param {boolean} [v] - Verbose logging.
  * @returns {string} - The schema file contents.
  */
-export function writeSchemaFile(data, target, verbose) {
-  log(verbose, 'Converting data to schema file...')
+export function writeSchemaFile(data, target, v) {
+  log(v, 'Converting data to schema file...')
 
   const contents = schemaFileHeader + jsonToZod(data)
 
-  log(verbose, 'Done.')
-  log(verbose, 'Writing to file...')
+  log(v, 'Done.')
+  log(v, 'Writing to file...')
 
   fs.writeFileSync(target, contents)
 
-  log(verbose, 'Done.')
-  log(
-    verbose,
-    'Schema file created at',
-    target.replace(process.cwd() + path.sep, '')
-  )
+  log(v, 'Done.')
+  log(v, 'Schema file created at', target)
 }
 
 /**
@@ -57,11 +55,11 @@ export function schema({ workbook, config, verbose }) {
     const task = config.schema[i]
     const taskWorkbook = task.workbook || workbook
 
-    if (fs.existsSync(task.target)) {
+    if (task.skipIfExists && fs.existsSync(task.target)) {
       return
     }
 
-    log(verbose, 'Reading', taskWorkbook.replace(process.cwd() + path.sep, ''))
+    log(verbose, 'Reading', taskWorkbook)
 
     const wb = XLSX.readFile(taskWorkbook)
 

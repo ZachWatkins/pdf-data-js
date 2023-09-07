@@ -9,6 +9,12 @@ import path from 'path'
 
 export function log(v, ...message) {
   if (v) {
+    if (message.length > 0) {
+      // Replace absolute file path references with relative paths.
+      for (let i = 0; i < message.length; i++) {
+        message[i] = message[i].replace(process.cwd() + path.sep, '')
+      }
+    }
     console.log(...message)
   }
 }

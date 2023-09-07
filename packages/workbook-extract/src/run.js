@@ -4,6 +4,7 @@
  * @year 2023
  */
 
+import fs from 'fs'
 import path from 'path'
 import XLSX from 'xlsx'
 import utils from './utils.js'
@@ -162,7 +163,7 @@ function runExtract({ workbook, sheet, verbose }) {
 }
 
 function runQueriedExtract({ workbook, sheet, query, verbose }) {
-  log(verbose, 'Reading', workbook.replace(process.cwd() + path.sep, ''))
+  log(verbose, 'Reading', workbook)
 
   const wb = XLSX.readFile(workbook)
 
@@ -173,6 +174,7 @@ function runQueriedExtract({ workbook, sheet, query, verbose }) {
   if (query.where && query.where.length) {
     let len = data.length
     data = data.filter(makeWhereQuery(query.where))
+
     log(verbose, `${len - data.length} rows filtered.`)
   }
 
@@ -182,6 +184,7 @@ function runQueriedExtract({ workbook, sheet, query, verbose }) {
     for (let i = 0; i < data.length; i++) {
       data[i] = select(data[i])
     }
+
     log(verbose, `${Object.keys(data[0]).length} of ${len} columns selected.`)
   }
 
@@ -192,6 +195,7 @@ function runQueriedExtract({ workbook, sheet, query, verbose }) {
         clause.push('asc')
       }
       data.sort(makeOrderByQuery(query.orderBy, data))
+
       log(verbose, `Sorted by ${clause[0]} ${clause[1]}.`)
     }
   }
@@ -204,28 +208,26 @@ function runQueriedExtract({ workbook, sheet, query, verbose }) {
 export function run({ workbook, config, verbose }) {
   if (config && config.extract) {
     for (let i = 0; i < config.extract.length; i++) {
-      const extract = config.extract[i]
+      const task = config.extract[i]
+      const taskWorkbook = task.workbook || workbook
 
-      if (!utils.shouldCreateFile(extract, config.override)) {
+      if (task.skipIfExists && fs.existsSync(task.target)) {
         continue
       }
 
-      if (extract.workbook) {
-        workbook = extract.workbook
-      }
-      const data = extract.query
+      const data = task.query
         ? runQueriedExtract({
-            ...extract,
-            workbook,
+            ...task,
+            workbook: taskWorkbook,
             verbose,
           })
-        : runExtract({ ...extract, workbook, verbose })
+        : runExtract({ ...task, workbook: taskWorkbook, verbose })
 
-      log(verbose, 'Data extracted, writing to file at', extract.target)
+      log(verbose, 'Data extracted, writing to file at', task.target)
 
-      utils.createFile({ ...extract, data })
+      utils.createFile({ ...task, data })
 
-      log(verbose, `File created: ${extract.target.replace(process.cwd(), '')}`)
+      log(verbose, 'File created at', task.target)
     }
   }
 }
