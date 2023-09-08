@@ -7,10 +7,10 @@
  * @year 2023
  */
 
-import { schema, validate } from './index.js'
+import { sheetToZod, parseSheet } from './index.js'
 
 const help = `
-Usage: sheet-to-zod <file> [<file[.sheet].zod.js>] [--sheet <name>] [--validate] [--verbose] [--help]
+Usage: sheet-to-zod <file> [<file[.sheet].zod.js>] [--sheet <name>] [--validate] [--help]
 
 Arguments:
   <file>            Path to workbook file. Accepts "xlsx", "xls", and "csv" file types.
@@ -19,7 +19,6 @@ Arguments:
 Options:
   --sheet <name>    Name of workbook sheet to extract, if applicable. Default is first sheet.
   --validate        Validate workbook data using the given Zod file.
-  --verbose         Display verbose output.
   --help            Display this help message.
 `
 
@@ -36,12 +35,11 @@ if (process.argv.length < 3 || process.argv.includes('--help')) {
       ? process.argv[process.argv.indexOf('--sheet') + 1]
       : undefined,
     validate: process.argv.includes('--validate'),
-    verbose: process.argv.includes('--verbose'),
   }
 
   if (validate) {
-    validate(ARGS)
+    parseSheet(ARGS)
   } else {
-    schema(ARGS)
+    sheetToZod(ARGS)
   }
 }
