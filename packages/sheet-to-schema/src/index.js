@@ -3,21 +3,17 @@
  * @author Zachary K. Watkins, <watkinza@gmail.com>
  * @year 2023
  */
+const fs = require('fs')
+const z = require('zod')
+const path = require('path')
+const XLSX = require('xlsx')
+const { jsonToZod } = require('json-to-zod')
 
-import fs from 'fs'
-import path from 'path'
-import XLSX from 'xlsx'
-import { jsonToZod } from 'json-to-zod'
+function isFloat(n) {
+  return Number(n) === n && n % 1 !== 0
+}
 
-/**
- * Create a Zod schema for a workbook sheet.
- * @param {object} options
- * @param {string} options.workbook Path to workbook file.
- * @param {string} [options.sheet] Name of workbook sheet to evaluate. Default is the first sheet.
- * @param {string} [options.zodfile] Path to Zod file to write. If undefined, defaults to workbook name with a "[.sheet].zod.js" extension.
- * @returns {boolean} Returns true if the Zod file was written successfully.
- */
-export async function sheetToZod({ workbook, sheet, zodfile }) {
+function get(workbook, sheet, schemaLang = 'zod') {
   if (!workbook) {
     throw new Error(`Workbook file not defined.`)
   }
@@ -27,14 +23,43 @@ export async function sheetToZod({ workbook, sheet, zodfile }) {
 
   const wb = XLSX.readFile(workbook)
 
-  if (!zodfile) {
+  if (!sheet) {
+    sheet = wb.SheetNames[0]
+  }
+
+  const data = XLSX.utils.sheet_to_json(wb.Sheets[sheet])
+
+  const langInterface = 'zod' === schemaLang ? SheetToZod(data) : null
+
+  return langInterface.rowsToSchema(data)
+}
+
+/**
+ * Create a schema file for a workbook sheet.
+ * @param {object} options
+ * @param {string} options.workbook Path to workbook file.
+ * @param {string} [options.sheet] Name of workbook sheet to evaluate. Default is the first sheet.
+ * @param {string} [options.filename] Path to Zod file to write. If undefined, defaults to workbook name with a "[.sheet].zod.js" extension.
+ * @returns {boolean} Returns true if the Zod file was written successfully.
+ */
+function toFile(workbook, sheet, filename) {
+  if (!workbook) {
+    throw new Error(`Workbook file not defined.`)
+  }
+  if (!fs.existsSync(workbook)) {
+    throw new Error(`Workbook file "${workbook}" not found.`)
+  }
+
+  const wb = XLSX.readFile(workbook)
+
+  if (!filename) {
     if (sheet) {
-      zodfile = workbook.replace(path.extname(workbook), `.${sheet}.zod.js`)
+      filename = workbook.replace(path.extname(workbook), `.${sheet}.zod.js`)
     } else {
       if (wb.SheetNames.length < 2) {
-        zodfile = workbook.replace(path.extname(workbook), `.zod.js`)
+        filename = workbook.replace(path.extname(workbook), `.zod.js`)
       } else {
-        zodfile = workbook.replace(
+        filename = workbook.replace(
           path.extname(workbook),
           `.${wb.SheetNames[0]}.zod.js`
         )
@@ -51,7 +76,7 @@ export async function sheetToZod({ workbook, sheet, zodfile }) {
   const schemaRefName = 'schema'
   const schema = jsonToZod(data, schemaRefName, true)
   fs.writeFileSync(
-    zodfile,
+    filename,
     `/**
  * This file validates data in the "${sheet}" sheet of the
  * "${path.basename(workbook)}" workbook.
@@ -63,7 +88,7 @@ ${schema}
 export default ${schemaRefName}
 `
   )
-  return fs.existsSync(zodfile)
+  return fs.existsSync(filename)
 }
 
 /**
@@ -75,7 +100,7 @@ export default ${schemaRefName}
  * @param {string} [options.zodfile] Path to Zod file.
  * @returns {ZodError|array} Returns a ZodError if validation fails, otherwise returns an array of zero or more objects.
  */
-export async function parseSheet({ workbook, sheet, schema, zodfile }) {
+async function parseSheet({ workbook, sheet, schema, zodfile }) {
   if (!fs.existsSync(workbook)) {
     throw new Error(`Workbook file "${workbook}" not found.`)
   }
@@ -100,4 +125,4 @@ export async function parseSheet({ workbook, sheet, schema, zodfile }) {
   return !parsed.success ? parsed.error : parsed.data
 }
 
-export default { sheetToZod, parseSheet }
+module.exports = { toFile, get, parseSheet }

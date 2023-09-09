@@ -4,9 +4,8 @@
   "description": "Package to generate Zod schemas for workbook sheets.",
   "author": "Zachary K. Watkins",
   "license": "MIT",
-  "type": "module",
   "bin": {
-    "sheet-to-zod": "./cli.js"
+    "sheet-to-zod": "./.bin/cli.js"
   },
   "keywords": [
     "workbook",
@@ -25,7 +24,7 @@
   "engines": {
     "node": ">=18"
   },
-  "main": "index.js",
+  "main": "src/index.js",
   "dependencies": {
     "json-to-zod": "^1.1.2",
     "xlsx": "^0.18.5",
