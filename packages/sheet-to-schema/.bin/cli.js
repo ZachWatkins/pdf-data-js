@@ -10,7 +10,7 @@
 import { sheetToZod, parseSheet } from './index.js'
 
 const help = `
-Usage: sheet-to-zod <file> [<file[.sheet].zod.js>] [--sheet <name>] [--validate] [--help]
+Usage: sheet-to-schema <file> [<file[.sheet].zod.js>] [--sheet <name>] [--validate] [--help]
 
 Arguments:
   <file>            Path to workbook file. Accepts "xlsx", "xls", and "csv" file types.
