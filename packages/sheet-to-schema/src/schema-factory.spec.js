@@ -31,6 +31,8 @@ const mockData = [
 describe('SchemaFactory', () => {
   test('creates a schema from workbook data using the default schema adapter', () => {
     const factory = new SchemaFactory({ rows: mockData })
+    const schema = factory.get()
+    expect(schema.id).toEqual([Number])
     factory.writeFile('schema.js')
   })
 })
