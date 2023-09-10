@@ -32,7 +32,19 @@ describe('SchemaFactory', () => {
   test('creates a schema from workbook data using the default schema adapter', () => {
     const factory = new SchemaFactory({ rows: mockData })
     const schema = factory.get()
-    expect(schema.id).toEqual([Number])
+    expect(schema).toEqual({
+      id: [Number],
+      city: [String],
+      state: [String],
+      year: [Number],
+      visited: [Boolean],
+      resided: [Boolean, 'optional'],
+      population: [Number],
+      area: [Number],
+      latitude: [Number],
+      longitude: [Number],
+      rating: [Number, 'null'],
+    })
     factory.writeFile('schema.js')
   })
 })
