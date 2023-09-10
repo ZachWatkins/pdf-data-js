@@ -112,7 +112,7 @@ export class Adapter {
         `    ${propKey}: [` +
           propTypes
             .reduce((acc, type) => {
-              acc.push(this.cellTypeSchema(type))
+              acc.push(this.columnSchema(type))
               return acc
             }, [])
             .join(', ') +
