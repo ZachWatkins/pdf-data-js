@@ -23,10 +23,8 @@ export class SchemaFactory {
    * @returns {SchemaFactory} The factory instance.
    */
   constructor(options) {
+    this.adapter(options.adapter || new Adapter())
     if (options) {
-      if (options.adapter) {
-        this.adapter(options.adapter)
-      }
       if (options.rows) {
         this.rows(options.rows)
       }
@@ -48,9 +46,6 @@ export class SchemaFactory {
       if (options.fileOpts) {
         this.fileOpts(options.fileOpts)
       }
-    }
-    if (!this.#adapter) {
-      this.adapter(new Adapter())
     }
   }
 
