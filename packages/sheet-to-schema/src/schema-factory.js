@@ -49,6 +49,9 @@ export class SchemaFactory {
         this.fileOpts(options.fileOpts)
       }
     }
+    if (!this.#adapter) {
+      this.adapter(new Adapter())
+    }
   }
 
   /**
@@ -166,7 +169,7 @@ export class SchemaFactory {
     } else if (typeof options === 'object') {
       this.fileOpts(options)
     }
-    this.#resolveFilename()
+    this.#resolveOptions()
 
     if (!this.#adapter.getFileContents) {
       throw new Error(
@@ -204,7 +207,12 @@ export class SchemaFactory {
     return this.#adapter.wrapSchema ? this.#adapter.wrapSchema(schema) : schema
   }
 
-  #resolveFilename() {
+  /**
+   * Resolve options for the factory instance when possible.
+   * @private
+   * @returns {void}
+   */
+  #resolveOptions() {
     if (!this.#filename) {
       if (this.#workbookFilename) {
         let file = this.#workbookFilename.substring(
