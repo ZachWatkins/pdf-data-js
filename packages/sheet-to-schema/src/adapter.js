@@ -96,7 +96,7 @@ export class Adapter {
 
     for (const prop in types) {
       // Sorts types so null and optional are at the end of the array, and optional is at the very end of the array when present.
-      let types = Object.keys(types[prop]).sort((a, b) =>
+      let propTypes = Object.keys(types[prop]).sort((a, b) =>
         'optional' === a
           ? 1
           : 'optional' === b
@@ -110,7 +110,7 @@ export class Adapter {
       let propKey = prop.indexOf(' ') > -1 ? `"${prop}"` : prop
       lines.push(
         `    ${propKey}: [` +
-          types
+          propTypes
             .reduce((acc, type) => {
               acc.push(this.cellTypeSchema(type))
               return acc
