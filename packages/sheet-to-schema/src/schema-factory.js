@@ -5,6 +5,7 @@
  */
 
 import fs from 'fs'
+import path from 'path'
 import { Adapter } from './adapter.js'
 
 export class SchemaFactory {
@@ -172,7 +173,7 @@ export class SchemaFactory {
       )
     }
 
-    const destination = `${this.#directory}/${this.#filename}`
+    const destination = path.resolve(this.#directory, this.#filename)
 
     if (fs.existsSync(destination)) {
       if (!this.#overwrite) {
