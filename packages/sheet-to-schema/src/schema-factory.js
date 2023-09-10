@@ -15,14 +15,49 @@ export class SchemaFactory {
   #workbookFilename = ''
   #directory = ''
   #overwrite = false
-  constructor() {}
+  #fileContentOptions = {}
 
   /**
-   * Create a new factory instance.
+   * Create a new instance.
+   * @param {object} [options] - Options for the factory instance.
    * @returns {SchemaFactory} The factory instance.
    */
-  static make() {
-    return new SchemaFactory()
+  constructor(options) {
+    if (options) {
+      if (options.adapter) {
+        this.adapter(options.adapter)
+      }
+      if (options.rows) {
+        this.rows(options.rows)
+      }
+      if (options.sheet) {
+        this.sheet(options.sheet)
+      }
+      if (options.workbook) {
+        this.workbook(options.workbook)
+      }
+      if (options.filename) {
+        this.filename(options.filename)
+      }
+      if (options.directory) {
+        this.directory(options.directory)
+      }
+      if (options.overwrite) {
+        this.overwrite(options.overwrite)
+      }
+      if (options.fileOpts) {
+        this.fileOpts(options.fileOpts)
+      }
+    }
+  }
+
+  /**
+   * Get a new instance.
+   * @param {object} [options] - Options for the factory instance.
+   * @returns {SchemaFactory} The factory instance.
+   */
+  static make(options) {
+    return new SchemaFactory(options)
   }
 
   /**
@@ -111,14 +146,66 @@ export class SchemaFactory {
   }
 
   /**
-   * Write a schema file using the adapter.
-   * @param {string} [filename] - Filename to use for the schema file.
+   * Set options to be passed to the adapter's `getFileContents` method.
+   * @param {object} options - Options to be passed to the adapter's `getFileContents` method.
    * @returns {SchemaFactory} The factory instance.
    */
-  makeFile(filename) {
-    if (filename) {
-      this.filename(filename)
-    } else if (!this.#filename) {
+  fileOpts(options) {
+    this.#fileContentOptions = options
+    return this
+  }
+
+  /**
+   * Write a schema file using the adapter.
+   * @param {undefined|string|object} [options] - Filename to use for the schema file, or options for the schema file.
+   * @returns {SchemaFactory} The factory instance.
+   */
+  writeFile(options) {
+    if (typeof options === 'string') {
+      this.filename(options)
+    } else if (typeof options === 'object') {
+      this.fileOpts(options)
+    }
+    this.#resolveFilename()
+
+    if (!this.#adapter.getFileContents) {
+      throw new Error(
+        'The adapter must implement a `getFileContents` method which returns a string for the schema file contents.'
+      )
+    }
+
+    const destination = `${this.#directory}/${this.#filename}`
+
+    if (fs.existsSync(destination)) {
+      if (!this.#overwrite) {
+        throw new Error(`File "${this.#filename}" already exists.`)
+      } else {
+        fs.unlinkSync(destination)
+      }
+    }
+
+    fs.writeFileSync(
+      destination,
+      this.#adapter.getFileContents(this.#propTypes, this.#fileContentOptions)
+    )
+
+    return this
+  }
+
+  /**
+   * Convert a sheet's rows to a schema modeling the allowed row column values.
+   * @return {any} A schema value for a sheet which fits the adapter's schema language.
+   */
+  get() {
+    const schema = {}
+    for (const prop in this.#propTypes) {
+      schema[prop] = this.#adapter.columnSchema(this.#propTypes[prop])
+    }
+    return this.#adapter.wrapSchema ? this.#adapter.wrapSchema(schema) : schema
+  }
+
+  #resolveFilename() {
+    if (!this.#filename) {
       if (this.#workbookFilename) {
         let file = this.#workbookFilename.substring(
           0,
@@ -136,37 +223,6 @@ export class SchemaFactory {
         )
       }
     }
-    if (!this.#adapter.getFileContents) {
-      throw new Error(
-        'The adapter must implement a `getFileContents` method to write a schema file.'
-      )
-    }
-    const contents = this.#adapter.getFileContents(this.#propTypes)
-    const destination = `${this.#directory}/${this.#filename}`
-
-    if (fs.existsSync(destination)) {
-      if (!this.#overwrite) {
-        throw new Error(`File "${this.#filename}" already exists.`)
-      } else {
-        fs.unlinkSync(destination)
-      }
-    }
-
-    fs.writeFileSync(destination, contents)
-
-    return this
-  }
-
-  /**
-   * Convert a sheet's rows to a schema modeling the allowed row column values.
-   * @return {any} A schema value for a sheet which fits the adapter's schema language.
-   */
-  make() {
-    const schema = {}
-    for (const prop in this.#propTypes) {
-      schema[prop] = this.#adapter.columnSchema(this.#propTypes[prop])
-    }
-    return this.#adapter.wrapSchema ? this.#adapter.wrapSchema(schema) : schema
   }
 }
 
